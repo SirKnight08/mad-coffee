@@ -702,7 +702,9 @@
         scene.add(carGroup);
 
         function buildCar(type) {
-            carGroup.clear();
+            while (carGroup.children.length > 0) {
+                carGroup.remove(carGroup.children[0]);
+            }
 
             const wheelZ = type === 'suv' ? 0.45 : 0.38;
             const wheelY = type === 'suv' ? -0.18 : -0.22;
