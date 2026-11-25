@@ -3,20 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mad Coffee — Awaken Your Senses</title>
+    <title>Abuja Cars — Premium Automotive</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #060504;
-            --ink: #f5f1ea;
-            --accent: #c9a227;
-            --accent-soft: rgba(201, 162, 39, 0.35);
-            --coffee: #4b2e1f;
-            --cream: #d7ccc8;
-            --surface: rgba(255, 255, 255, 0.025);
-            --border: rgba(245, 241, 234, 0.08);
+            --bg: #050507;
+            --ink: #f5f5f5;
+            --accent: #d4af37;
+            --accent-soft: rgba(212, 175, 55, 0.35);
+            --surface: rgba(255, 255, 255, 0.03);
+            --border: rgba(245, 245, 245, 0.08);
             --font-main: 'Playfair Display', serif;
             --font-ui: 'Inter', sans-serif;
         }
@@ -89,7 +87,7 @@
 
         .preloader-ring {
             width: 60px; height: 60px;
-            border: 2px solid rgba(201,162,39,0.12);
+            border: 2px solid rgba(212,175,55,0.12);
             border-top-color: var(--accent);
             border-radius: 50%;
             animation: spin 1s linear infinite;
@@ -101,7 +99,7 @@
             font-size: 0.75rem;
             letter-spacing: 0.5em;
             text-transform: uppercase;
-            color: rgba(245,241,234,0.35);
+            color: rgba(245,245,245,0.35);
             animation: pulse 2s ease-in-out infinite;
         }
 
@@ -118,14 +116,14 @@
             align-items: center;
             z-index: 60;
             backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(245, 241, 234, 0.06);
+            border-bottom: 1px solid rgba(245, 245, 245, 0.06);
             transition: background 0.5s ease, border-color 0.5s ease, padding 0.5s ease;
             mix-blend-mode: difference;
         }
 
         header.scrolled {
-            background: rgba(6, 5, 4, 0.92);
-            border-bottom-color: rgba(245, 241, 234, 0.18);
+            background: rgba(5, 5, 7, 0.92);
+            border-bottom-color: rgba(245, 245, 245, 0.18);
             padding: 1rem 3rem;
             mix-blend-mode: normal;
         }
@@ -184,7 +182,7 @@
             cursor: pointer;
             transition: all 0.3s;
             z-index: 10;
-            box-shadow: 0 0 0 rgba(201,162,39,0);
+            box-shadow: 0 0 0 rgba(212,175,55,0);
         }
 
         .menu-btn:hover {
@@ -214,13 +212,13 @@
 
         .mobile-menu {
             position: fixed; top: 0; right: -100%; width: 100%; max-width: 340px;
-            height: 100vh; background: rgba(6, 5, 4, 0.98);
+            height: 100vh; background: rgba(5, 5, 7, 0.98);
             backdrop-filter: blur(24px);
             z-index: 55;
             padding: 4rem 3rem 2rem;
             display: flex; flex-direction: column;
             transition: right 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-            border-left: 1px solid rgba(245,241,234,0.08);
+            border-left: 1px solid rgba(245,245,245,0.08);
         }
 
         .mobile-menu.open { right: 0; }
@@ -262,7 +260,7 @@
 
         .hero-bg {
             position: absolute; inset: 0;
-            background: radial-gradient(circle at 50% 40%, rgba(201,162,39,0.08), transparent 55%);
+            background: radial-gradient(circle at 50% 40%, rgba(212,175,55,0.08), transparent 55%);
             z-index: 1;
         }
 
@@ -289,7 +287,7 @@
 
         h1 .accent { color: var(--accent); font-style: italic; }
         h1 .gradient-text {
-            background: linear-gradient(135deg, #ffffff 0%, #c9a227 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #d4af37 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
@@ -297,7 +295,7 @@
 
         .hero p {
             font-size: 1.35rem; line-height: 1.7;
-            color: rgba(245,241,234,0.75); max-width: 560px;
+            color: rgba(245,245,245,0.75); max-width: 560px;
             margin-bottom: 3rem;
             opacity: 0; transform: translateY(40px);
             animation: fadeUp 1s 0.7s forwards cubic-bezier(0.23, 1, 0.32, 1);
@@ -325,26 +323,14 @@
 
         .btn:hover::before { transform: translateX(100%); }
 
-        .btn-primary { background: var(--accent); color: var(--bg); box-shadow: 0 0 0 rgba(201,162,39,0); }
+        .btn-primary { background: var(--accent); color: var(--bg); box-shadow: 0 0 0 rgba(212,175,55,0); }
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px var(--accent-soft); }
 
-        .btn-ghost { border: 1px solid rgba(245,241,234,0.3); color: var(--ink); background: transparent; }
-        .btn-ghost:hover { background: rgba(245,241,234,0.08); border-color: var(--ink); transform: translateY(-2px); }
-
-        .mouse-hint {
-            position: absolute; bottom: 3.5rem; left: 50%; transform: translateX(-50%);
-            font-size: 0.7rem; letter-spacing: 0.4em; text-transform: uppercase;
-            color: rgba(245,241,234,0.35); z-index: 20;
-            animation: bounce 3s ease-in-out infinite;
-        }
+        .btn-ghost { border: 1px solid rgba(245,245,245,0.3); color: var(--ink); background: transparent; }
+        .btn-ghost:hover { background: rgba(245,245,245,0.08); border-color: var(--ink); transform: translateY(-2px); }
 
         @keyframes fadeUp {
             to { opacity: 1; transform: none; }
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-10px); }
         }
 
         /* ---- Section base ---- */
@@ -352,7 +338,7 @@
 
         .parallax-wrap {
             position: absolute; inset: 0;
-            background: radial-gradient(circle at 50% 30%, rgba(201,162,39,0.04), transparent 60%);
+            background: radial-gradient(circle at 50% 30%, rgba(212,175,55,0.04), transparent 60%);
             pointer-events: none;
         }
 
@@ -374,91 +360,55 @@
         .section-head h2 .accent { color: var(--accent); }
 
         .section-head p {
-            color: rgba(245,241,234,0.7); font-size: 1.2rem; line-height: 1.8;
+            color: rgba(245,245,245,0.7); font-size: 1.2rem; line-height: 1.8;
         }
 
         .reveal { opacity: 0; transform: translateY(50px); transition: all 0.9s cubic-bezier(0.23, 1, 0.32, 1); }
         .reveal.active { opacity: 1; transform: none; }
         .reveal-delay { transition-delay: 0.2s; }
 
-        /* ---- About ---- */
-        .about-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+        /* ---- Fleet ---- */
+        .fleet-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem; max-width: 1200px; margin: 0 auto;
         }
 
-        @media (max-width: 900px) { .about-grid { grid-template-columns: 1fr; gap: 3rem; } }
-
-        .about-img-wrap {
-            height: 520px; border-radius: 40px;
-            position: relative; overflow: hidden;
-            box-shadow: 0 50px 100px rgba(0,0,0,0.6);
-            border: 1px solid var(--border);
-            background: linear-gradient(135deg, var(--coffee), #1a1008);
-        }
-
-        .about-img-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; transition: transform 0.8s ease; }
-        .about-img-wrap:hover img { transform: scale(1.05); }
-
-        .about-img-wrap::after {
-            content: ''; position: absolute; inset: -20%;
-            background: radial-gradient(circle at 50% 50%, rgba(201,162,39,0.15), transparent 50%);
-            pointer-events: none;
-        }
-
-        .about-text h3 { font-size: 2.2rem; margin-bottom: 1.5rem; line-height: 1.15; letter-spacing: -0.02em; }
-        .about-text h3 .accent { color: var(--accent); }
-        .about-text p { color: rgba(245,241,234,0.8); line-height: 1.9; margin-bottom: 1.75rem; font-size: 1.15rem; }
-
-        .stats {
-            display: flex; gap: 3rem; margin-top: 3rem;
-        }
-
-        .stat { display: flex; flex-direction: column; }
-        .stat .num { font-family: var(--font-main); font-size: 2.5rem; font-weight: 900; color: var(--accent); line-height: 1; }
-        .stat .lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.25em; color: rgba(245,241,234,0.5); margin-top: 0.4rem; }
-
-        /* ---- Menu ---- */
-        .menu-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2.5rem; max-width: 1100px; margin: 0 auto;
-        }
-
-        .card {
+        .fleet-card {
             position: relative;
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: 32px; padding: 2.5rem;
+            border-radius: 36px; padding: 3rem;
             overflow: hidden; transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             cursor: default;
             transform-style: preserve-3d;
         }
 
-        .card::before {
+        .fleet-card::before {
             content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 80% -10%, rgba(201,162,39,0.12), transparent 55%);
+            background: radial-gradient(circle at 80% -10%, rgba(212,175,55,0.12), transparent 55%);
             opacity: 0; transition: opacity 0.5s; pointer-events: none;
         }
 
-        .card:hover {
+        .fleet-card:hover {
             transform: translateY(-12px) scale(1.01);
             border-color: var(--accent);
             box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 40px var(--accent-soft);
         }
 
-        .card:hover::before { opacity: 1; }
+        .fleet-card:hover::before { opacity: 1; }
 
-        .badge {
+        .fleet-badge {
             display: inline-block; font-size: 0.65rem; letter-spacing: 0.3em;
             text-transform: uppercase; color: var(--accent); font-weight: 800;
             margin-bottom: 1.5rem;
         }
 
-        .card h3 { font-size: 1.5rem; margin-bottom: 0.75rem; letter-spacing: -0.01em; }
-        .card p { color: rgba(245,241,234,0.7); font-size: 1rem; line-height: 1.7; margin-bottom: 2rem; }
+        .fleet-card h3 { font-size: 1.5rem; margin-bottom: 0.75rem; letter-spacing: -0.01em; }
+        .fleet-card p { color: rgba(245,245,245,0.7); font-size: 1rem; line-height: 1.7; margin-bottom: 2rem; }
 
         .price-row {
             display: flex; justify-content: space-between; align-items: baseline;
-            padding-top: 1.5rem; border-top: 1px solid rgba(245,241,234,0.1);
+            padding-top: 1.5rem; border-top: 1px solid rgba(245,245,245,0.1);
         }
 
         .price { font-family: var(--font-main); font-size: 1.75rem; font-weight: 900; color: var(--ink); }
@@ -469,7 +419,7 @@
         }
 
         .contact-wrap h2 { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 1rem; letter-spacing: -0.03em; }
-        .contact-wrap p { color: rgba(245,241,234,0.7); margin-bottom: 4rem; font-size: 1.25rem; }
+        .contact-wrap p { color: rgba(245,245,245,0.7); margin-bottom: 4rem; font-size: 1.25rem; }
 
         .contact-card {
             background: rgba(255,255,255,0.02); border: 1px solid var(--border);
@@ -486,7 +436,7 @@
         .social { display: flex; justify-content: center; gap: 1.75rem; }
         .social a {
             width: 48px; height: 48px; border-radius: 50%;
-            border: 1px solid rgba(245,241,234,0.15); color: var(--ink);
+            border: 1px solid rgba(245,245,245,0.15); color: var(--ink);
             display: flex; align-items: center; justify-content: center;
             text-decoration: none; font-size: 1.3rem; transition: all 0.4s;
         }
@@ -495,14 +445,14 @@
         /* ---- Footer ---- */
         footer {
             padding: 3rem; border-top: 1px solid var(--border);
-            text-align: center; color: rgba(245,241,234,0.35); font-size: 0.8rem;
+            text-align: center; color: rgba(245,245,245,0.35); font-size: 0.8rem;
             letter-spacing: 0.2em; text-transform: uppercase;
         }
 
         /* scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: var(--bg); }
-        ::-webkit-scrollbar-thumb { background: var(--coffee); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb { background: #2a2a2f; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
         @media (max-width: 640px) {
@@ -512,7 +462,6 @@
             .menu-btn { padding: 0.6rem 1.1rem; font-size: 0.75rem; }
             .hamburger { display: flex; }
             section { padding: 110px 1.5rem; }
-            .stats { flex-direction: column; gap: 2rem; align-items: flex-start; }
             .contact-card { padding: 2.5rem; }
             .cta-group { flex-direction: column; align-items: flex-start; }
             .hero p { font-size: 1.15rem; }
@@ -522,21 +471,21 @@
 <body>
 
     <div id="preloader">
-        <div class="preloader-logo">M<span style="color:var(--accent)">A</span>D Coffee</div>
+        <div class="preloader-logo">A<span style="color:var(--accent)">B</span>UJA Cars</div>
         <div class="preloader-ring"></div>
-        <div class="preloader-text">brewing</div>
+        <div class="preloader-text">loading fleet</div>
     </div>
 
     <canvas id="webgl"></canvas>
 
     <header id="header" class="layer">
-        <a href="#" class="logo" onclick="scrollToSection('home'); return false;">M<span style="color:var(--accent)">A</span>D Coffee</a>
+        <a href="#" class="logo" onclick="scrollToSection('home'); return false;">A<span style="color:var(--accent)">B</span>UJA Cars</a>
         <nav id="main-nav">
+            <a href="#fleet">Fleet</a>
             <a href="#about">About</a>
-            <a href="#menu">Menu</a>
             <a href="#contact">Contact</a>
         </nav>
-        <button class="menu-btn" onclick="scrollToSection('menu'); return false;">View Menu</button>
+        <button class="menu-btn" onclick="scrollToSection('fleet'); return false;">View Fleet</button>
         <button class="hamburger" id="hamburger" aria-label="Open menu">
             <span></span><span></span><span></span>
         </button>
@@ -545,82 +494,72 @@
     <div class="mobile-menu" id="mobile-menu">
         <button class="close-btn" id="close-mobile" aria-label="Close menu">&times;</button>
         <nav>
+            <a href="#fleet" onclick="closeMobile()">Fleet</a>
             <a href="#about" onclick="closeMobile()">About</a>
-            <a href="#menu" onclick="closeMobile()">Menu</a>
             <a href="#contact" onclick="closeMobile()">Contact</a>
         </nav>
-        <button class="menu-btn" onclick="closeMobile(); scrollToSection('menu');">View Menu</button>
+        <button class="menu-btn" onclick="closeMobile(); scrollToSection('fleet');">View Fleet</button>
     </div>
 
     <section class="hero layer" id="home">
         <div class="hero-bg"></div>
         <div class="hero-content">
-            <div class="kicker">Specialty Coffee Roastery</div>
-            <h1>Mad <span class="accent">Coffee</span><br><span class="gradient-text">For the Curious Soul</span></h1>
-            <p>Small-batch roasted beans, ethically sourced and brewed with obsession. Step into a darker, richer ritual.</p>
+            <div class="kicker">Premium Automotive</div>
+            <h1>Abuja <span class="accent">Cars</span><br><span class="gradient-text">Driven by Excellence</span></h1>
+            <p>Curated collection of luxury vehicles engineered for precision, comfort, and performance.</p>
             <div class="cta-group">
-                <a href="#menu" class="btn btn-primary" onclick="scrollToSection('menu'); return false;">Explore the Roast</a>
+                <a href="#fleet" class="btn btn-primary" onclick="scrollToSection('fleet'); return false;">View Fleet</a>
                 <a href="#about" class="btn btn-ghost" onclick="scrollToSection('about'); return false;">Our Story</a>
             </div>
         </div>
-        <div class="mouse-hint">move your mouse &middot; tap the cup</div>
+    </section>
+
+    <section id="fleet" class="layer">
+        <div class="parallax-wrap"></div>
+        <div class="section-head reveal">
+            <span class="kicker">Our Fleet</span>
+            <h2>Explore the<br><span class="accent">Collection</span></h2>
+            <p>Every vehicle meticulously maintained and ready for the road ahead.</p>
+        </div>
+        <div class="fleet-grid">
+            <article class="fleet-card reveal" data-car="sedan">
+                <span class="fleet-badge">Luxury Sedan</span>
+                <h3>Royal Sovereign</h3>
+                <p>Executive comfort meets refined engineering. Leather interior, advanced suspension, and a whisper-quiet cabin.</p>
+                <div class="price-row"><span>$45,000</span></div>
+            </article>
+            <article class="fleet-card reveal reveal-delay" data-car="suv">
+                <span class="fleet-badge">Premium SUV</span>
+                <h3>Desert Falcon</h3>
+                <p>Command the road with elevated presence. All-terrain capability wrapped in bold, sculpted design.</p>
+                <div class="price-row"><span>$58,000</span></div>
+            </article>
+            <article class="fleet-card reveal" data-car="sports">
+                <span class="fleet-badge">Sports Coupe</span>
+                <h3>Velocity Racer</h3>
+                <p>Pure performance in motion. Aerodynamic silhouette, lightning response, and an unmistakable road presence.</p>
+                <div class="price-row"><span>$89,000</span></div>
+            </article>
+            <article class="fleet-card reveal reveal-delay" data-car="electric">
+                <span class="fleet-badge">Electric Vehicle</span>
+                <h3>Nova Volt</h3>
+                <p>Zero emissions, maximum range. The future of driving, delivered in sleek, sustainable luxury.</p>
+                <div class="price-row"><span>$67,000</span></div>
+            </article>
+        </div>
     </section>
 
     <section id="about" class="layer">
         <div class="parallax-wrap"></div>
         <div class="section-head reveal">
             <span class="kicker">About Us</span>
-            <h2>Brewed with<br><span class="accent">Obsession</span></h2>
-            <p>We roast in the quiet hours, chasing the perfect crack. Every bean tells a story of altitude, soil, and patience. Mad Coffee is where ritual meets rebellion.</p>
+            <h2>Engineered with<br><span class="accent">Precision</span></h2>
+            <p>Abuja Cars was founded on a singular principle: every vehicle should exceed expectation. From sourcing to delivery, we uphold the highest standards in automotive excellence.</p>
         </div>
-        <div class="about-grid">
-            <div class="about-img-wrap reveal">
-                <img src="https://images.unsplash.com/photo-1495474472287-4d71bc821562?auto=format&fit=crop&w=1200&q=85" alt="Coffee beans">
-            </div>
-            <div class="about-text reveal reveal-delay">
-                <h3>From farm to cup</h3>
-                <p>We partner directly with farms in Ethiopia, Colombia, and Guatemala. No middlemen, no compromise—just green beans chosen by hand and roasted in small batches to unlock their true character.</p>
-                <p>Our cafe is open dawn to dusk. Come for the espresso, stay for the silence.</p>
-                <div class="stats">
-                    <div class="stat"><span class="num">2018</span><span class="lbl">Founded</span></div>
-                    <div class="stat"><span class="num">12+</span><span class="lbl">Origins</span></div>
-                    <div class="stat"><span class="num">50k</span><span class="lbl">Cups served</span></div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="menu" class="layer">
-        <div class="parallax-wrap"></div>
-        <div class="section-head reveal">
-            <span class="kicker">The Roast List</span>
-            <h2>Seasonal<br><span class="accent">Offerings</span></h2>
-        </div>
-        <div class="menu-grid">
-            <article class="card reveal">
-                <span class="badge">Espresso</span>
-                <h3>Madhouse Blend</h3>
-                <p>Chocolate, red apple, and a lingering hint of tobacco. Our signature pull—bold without bitterness.</p>
-                <div class="price-row"><span>$4.50</span></div>
-            </article>
-            <article class="card reveal reveal-delay">
-                <span class="badge">Filter</span>
-                <h3>Yirgacheffe Light</h3>
-                <p>Floral and citrus-forward with jasmine aromatics. Best enjoyed black, slow.</p>
-                <div class="price-row"><span>$5.00</span></div>
-            </article>
-            <article class="card reveal">
-                <span class="badge">Cold Brew</span>
-                <h3>Midnight Steep</h3>
-                <p>Steeped 18 hours. Syrupy body, dark cherry notes, served over a single large cube.</p>
-                <div class="price-row"><span>$5.50</span></div>
-            </article>
-            <article class="card reveal reveal-delay">
-                <span class="badge">Signature</span>
-                <h3>Mad Affogato</h3>
-                <p>Two shots of hot espresso poured over vanilla bean gelato. Bitter meets sweet in a glass.</p>
-                <div class="price-row"><span>$7.00</span></div>
-            </article>
+        <div class="about-grid reveal reveal-delay">
+            <div class="stat"><span class="num">2015</span><span class="lbl">Founded</span></div>
+            <div class="stat"><span class="num">500+</span><span class="lbl">Vehicles Sold</span></div>
+            <div class="stat"><span class="num">24/7</span><span class="lbl">Support</span></div>
         </div>
     </section>
 
@@ -629,41 +568,41 @@
         <div class="contact-wrap">
             <div class="section-head reveal" style="text-align:center;">
                 <span class="kicker">Visit Us</span>
-                <h2>Find the<br><span class="accent">Cafe</span></h2>
+                <h2>Find the<br><span class="accent">Showroom</span></h2>
             </div>
             <div class="contact-card reveal reveal-delay">
                 <div class="contact-item">
                     <div class="dot"></div>
                     <div>
                         <div>Address</div>
-                        <a href="https://maps.google.com" target="_blank">42 Roastery Lane, Downtown</a>
+                        <a href="https://maps.google.com" target="_blank">Plot 14, Ahmadu Bello Way, Abuja, FCT</a>
                     </div>
                 </div>
                 <div class="contact-item">
                     <div class="dot"></div>
                     <div>
                         <div>Hours</div>
-                        <a>Daily 7:00 &mdash; 19:00</a>
+                        <a>Mon &mdash; Sat 9:00 &mdash; 19:00</a>
                     </div>
                 </div>
                 <div class="contact-item">
                     <div class="dot"></div>
                     <div>
                         <div>Email</div>
-                        <a href="mailto:hello@madcoffee.example">hello@madcoffee.example</a>
+                        <a href="mailto:sales@abujacars.example">sales@abujacars.example</a>
                     </div>
                 </div>
             </div>
             <div class="social reveal">
                 <a href="#" aria-label="Instagram">&#128247;</a>
                 <a href="#" aria-label="Twitter">&#128278;</a>
-                <a href="#" aria-label="TikTok">&#128242;</a>
+                <a href="#" aria-label="WhatsApp">&#9993;</a>
             </div>
         </div>
     </section>
 
     <footer class="layer">
-        Mad Coffee &middot; Roasted with obsession. &copy; <span id="year"></span>
+        Abuja Cars &middot; Driven by Excellence. &copy; <span id="year"></span>
     </footer>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
@@ -707,10 +646,10 @@
             setActiveNav();
         });
 
-        /* ---------- Three.js Scene ---------- */
+        /* ---------- Three.js Car Scene ---------- */
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 100);
-        camera.position.set(0, 0.5, 5.5);
+        const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.set(0, 1.6, 5.2);
 
         const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('webgl'), alpha: true, antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -721,219 +660,207 @@
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
         // Lights
-        const ambient = new THREE.AmbientLight(0xffffff, 0.2);
+        const ambient = new THREE.AmbientLight(0xffffff, 0.3);
         scene.add(ambient);
 
-        const keyLight = new THREE.DirectionalLight(0xffffff, 1.6);
-        keyLight.position.set(3, 7, 4);
+        const keyLight = new THREE.DirectionalLight(0xffffff, 1.8);
+        keyLight.position.set(4, 8, 5);
         keyLight.castShadow = true;
         keyLight.shadow.mapSize.width = 2048;
         keyLight.shadow.mapSize.height = 2048;
         keyLight.shadow.camera.near = 0.5;
-        keyLight.shadow.camera.far = 25;
-        keyLight.shadow.camera.left = -8;
-        keyLight.shadow.camera.right = 8;
-        keyLight.shadow.camera.top = 8;
-        keyLight.shadow.camera.bottom = -8;
+        keyLight.shadow.camera.far = 30;
+        keyLight.shadow.camera.left = -10;
+        keyLight.shadow.camera.right = 10;
+        keyLight.shadow.camera.top = 10;
+        keyLight.shadow.camera.bottom = -10;
         scene.add(keyLight);
 
-        const fillLight = new THREE.PointLight(0xc9a227, 2.2, 16);
-        fillLight.position.set(-2.5, 0.5, 2);
+        const fillLight = new THREE.PointLight(0xd4af37, 2.5, 18);
+        fillLight.position.set(-3, 1, 4);
         scene.add(fillLight);
 
-        const rimLight = new THREE.SpotLight(0xffffff, 14, 20, 0.5, 0.4, 1);
-        rimLight.position.set(0, 4, -4);
+        const rimLight = new THREE.SpotLight(0xffffff, 20, 24, 0.5, 0.35, 1);
+        rimLight.position.set(0, 4, -5);
         rimLight.lookAt(0, 0, 0);
         scene.add(rimLight);
 
-        const backLight = new THREE.PointLight(0x5b3a1e, 1.5, 12);
+        const backLight = new THREE.PointLight(0x2a2a40, 1.2, 14);
         backLight.position.set(0, 0, -3);
         scene.add(backLight);
 
-        // Cup group
-        const cupGroup = new THREE.Group();
-        scene.add(cupGroup);
+        // Car materials
+        const bodyMat = new THREE.MeshStandardMaterial({ color: 0x1a1a1e, roughness: 0.25, metalness: 0.9 });
+        const glassMat = new THREE.MeshStandardMaterial({ color: 0x222831, roughness: 0.1, metalness: 0.05, transparent: true, opacity: 0.75 });
+        const tireMat = new THREE.MeshStandardMaterial({ color: 0x0d0d0f, roughness: 0.9, metalness: 0.1 });
+        const rimMat = new THREE.MeshStandardMaterial({ color: 0x888888, roughness: 0.3, metalness: 0.8 });
+        const lightMat = new THREE.MeshStandardMaterial({ color: 0xffaa00, emissive: 0xffaa00, emissiveIntensity: 0.5 });
+        const tailMat = new THREE.MeshStandardMaterial({ color: 0xff3333, emissive: 0xff3333, emissiveIntensity: 0.5 });
+        const chromeMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.1, metalness: 1.0 });
 
-        const cupColor = new THREE.Color(0x14100a);
-        const liquidColor = new THREE.Color(0x3d2316);
-        const foamColor = new THREE.Color(0x7a5233);
+        const carGroup = new THREE.Group();
+        scene.add(carGroup);
 
-        // Cup body (ceramic)
-        const cupGeo = new THREE.CylinderGeometry(0.75, 0.62, 1.12, 64);
-        const cupMat = new THREE.MeshStandardMaterial({
-            color: cupColor,
-            roughness: 0.25,
-            metalness: 0.05,
-            envMapIntensity: 1.0
-        });
-        const cup = new THREE.Mesh(cupGeo, cupMat);
-        cup.position.y = -0.26;
-        cup.castShadow = true;
-        cup.receiveShadow = true;
-        cupGroup.add(cup);
+        function buildCar(type) {
+            carGroup.clear();
 
-        // Cup rim (thicker, glazed)
-        const rimGeo = new THREE.TorusGeometry(0.78, 0.06, 24, 128, 0.38);
-        const rimMat = new THREE.MeshStandardMaterial({
-            color: 0x4a3426,
-            roughness: 0.2,
-            metalness: 0.4
-        });
-        const rim = new THREE.Mesh(rimGeo, rimMat);
-        rim.rotation.x = Math.PI / 2;
-        rim.position.y = 0.3;
-        rim.castShadow = true;
-        rim.receiveShadow = true;
-        cupGroup.add(rim);
+            const wheelZ = type === 'suv' ? 0.45 : 0.38;
+            const wheelY = type === 'suv' ? -0.18 : -0.22;
+            const bodyHeight = type === 'suv' ? 1.1 : 0.75;
+            const bodyY = type === 'suv' ? 0.05 : 0.0;
+            const cabinHeight = type === 'suv' ? 0.75 : 0.55;
+            const cabinY = bodyY + bodyHeight + cabinHeight / 2;
 
-        // Inner cup (visible liquid cavity)
-        const innerGeo = new THREE.CylinderGeometry(0.70, 0.56, 1.05, 64);
-        const innerMat = new THREE.MeshStandardMaterial({ color: 0x0b0806, roughness: 0.3 });
-        const inner = new THREE.Mesh(innerGeo, innerMat);
-        inner.position.y = -0.22;
-        inner.scale.set(1, 1, 0.98);
-        cupGroup.add(inner);
+            // Chassis
+            const chassis = new THREE.Mesh(new THREE.BoxGeometry(2.2, bodyHeight, 1.3, 4, 2, 4), bodyMat);
+            chassis.position.y = bodyY;
+            chassis.castShadow = true;
+            chassis.receiveShadow = true;
+            carGroup.add(chassis);
 
-        // Handle
-        const handleGeo = new THREE.TorusGeometry(0.23, 0.038, 16, 96, Math.PI);
-        const handle = new THREE.Mesh(handleGeo, cupMat);
-        handle.rotation.x = Math.PI / 2;
-        handle.position.set(1.08, -0.26, 0);
-        handle.castShadow = true;
-        cupGroup.add(handle);
+            // Wheels
+            function makeWheel(x, z) {
+                const g = new THREE.CylinderGeometry(0.32, 0.32, 0.34, 32);
+                const m = new THREE.Mesh(tireMat);
+                m.rotation.z = Math.PI / 2;
+                m.position.set(x, wheelY, z);
+                m.castShadow = true;
+                m.receiveShadow = true;
+                carGroup.add(m);
 
-        // Liquid
-        const liquidGeo = new THREE.CylinderGeometry(0.68, 0.68, 0.14, 64);
-        const liquidMat = new THREE.MeshStandardMaterial({
-            color: liquidColor,
-            roughness: 0.18,
-            metalness: 0.08
-        });
-        const liquid = new THREE.Mesh(liquidGeo, liquidMat);
-        liquid.position.y = 0.24;
-        liquid.castShadow = true;
-        cupGroup.add(liquid);
+                const inner = new THREE.Mesh(new THREE.CylinderGeometry(0.16, 0.16, 0.32, 16), rimMat);
+                inner.rotation.z = Math.PI / 2;
+                inner.position.set(x, wheelY, z);
+                carGroup.add(inner);
 
-        // Foam head
-        const foamGeo = new THREE.CylinderGeometry(0.715, 0.715, 0.07, 64);
-        const foamMat = new THREE.MeshStandardMaterial({
-            color: foamColor,
-            roughness: 0.7,
-            metalness: 0.02
-        });
-        const foam = new THREE.Mesh(foamGeo, foamMat);
-        foam.position.y = 0.32;
-        cupGroup.add(foam);
+                const cap = new THREE.Mesh(new THREE.CylinderGeometry(0.06, 0.06, 0.34, 8), chromeMat);
+                cap.rotation.z = Math.PI / 2;
+                cap.position.set(x, wheelY, z);
+                carGroup.add(cap);
 
-        // Latte art heart (drawn with a decal-ish ring stack)
-        const heartGroup = new THREE.Group();
-        const heartMat = new THREE.MeshStandardMaterial({ color: 0x2d1407, roughness: 0.5 });
-        // Two upper lobes
-        for (const dx of [-0.17, 0.17]) {
-            const lobe = new THREE.Mesh(new THREE.TorusGeometry(0.13, 0.018, 12, 32, Math.PI), heartMat);
-            lobe.rotation.x = Math.PI / 2;
-            lobe.position.set(dx, 0.326, 0.16);
-            heartGroup.add(lobe);
+                return m;
+            }
+
+            makeWheel(-0.95, wheelZ);
+            makeWheel(0.95, wheelZ);
+            makeWheel(-0.95, -wheelZ);
+            makeWheel(0.95, -wheelZ);
+
+            // Cabin
+            const cabin = new THREE.Mesh(new THREE.BoxGeometry(1.6, cabinHeight, 0.95, 2, 2, 2), bodyMat);
+            cabin.position.set(0, cabinY, 0);
+            cabin.castShadow = true;
+            carGroup.add(cabin);
+
+            // Windows
+            const frontWindow = new THREE.Mesh(new THREE.PlaneGeometry(0.85, cabinHeight * 0.85), glassMat);
+            frontWindow.position.set(0, cabinY, 0.485);
+            frontWindow.castShadow = true;
+            carGroup.add(frontWindow);
+
+            const backWindow = new THREE.Mesh(new THREE.PlaneGeometry(0.85, cabinHeight * 0.85), glassMat);
+            backWindow.position.set(0, cabinY, -0.485);
+            backWindow.rotation.y = Math.PI;
+            backWindow.castShadow = true;
+            carGroup.add(backWindow);
+
+            const sideWindowL = new THREE.Mesh(new THREE.PlaneGeometry(1.3, cabinHeight * 0.85), glassMat);
+            sideWindowL.position.set(0.68, cabinY, 0);
+            sideWindowL.rotation.y = Math.PI / 2;
+            sideWindowL.castShadow = true;
+            carGroup.add(sideWindowL);
+
+            const sideWindowR = new THREE.Mesh(new THREE.PlaneGeometry(1.3, cabinHeight * 0.85), glassMat);
+            sideWindowR.position.set(-0.68, cabinY, 0);
+            sideWindowR.rotation.y = -Math.PI / 2;
+            sideWindowR.castShadow = true;
+            carGroup.add(sideWindowR);
+
+            // Headlights
+            const headL = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.18, 0.05), lightMat);
+            headL.position.set(-1.12, bodyY - 0.05, 0.62);
+            headL.castShadow = true;
+            carGroup.add(headL);
+
+            const headR = new THREE.Mesh(new THREE.BoxGeometry(0.35, 0.18, 0.05), lightMat);
+            headR.position.set(1.12, bodyY - 0.05, 0.62);
+            headR.castShadow = true;
+            carGroup.add(headR);
+
+            // Taillights
+            const tailL = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.16, 0.05), tailMat);
+            tailL.position.set(-1.08, bodyY - 0.05, -0.65);
+            tailL.castShadow = true;
+            carGroup.add(tailL);
+
+            const tailR = new THREE.Mesh(new THREE.BoxGeometry(0.3, 0.16, 0.05), tailMat);
+            tailR.position.set(1.08, bodyY - 0.05, -0.65);
+            tailR.castShadow = true;
+            carGroup.add(tailR);
+
+            // Roof spoiler (sports)
+            if (type === 'sports') {
+                const spoiler = new THREE.Mesh(new THREE.BoxGeometry(1.5, 0.12, 0.35), bodyMat);
+                spoiler.position.set(0, cabinY + cabinHeight / 2 + 0.06, -0.42);
+                spoiler.castShadow = true;
+                carGroup.add(spoiler);
+            }
+
+            // Grille (sedan/suv)
+            if (type === 'sedan' || type === 'suv') {
+                const grille = new THREE.Mesh(new THREE.BoxGeometry(0.7, 0.28, 0.04), chromeMat);
+                grille.position.set(0, bodyY - 0.02, 0.67);
+                carGroup.add(grille);
+            }
+
+            // Charging port (electric)
+            if (type === 'electric') {
+                const port = new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.08, 0.03, 16), chromeMat);
+                port.rotation.x = Math.PI / 2;
+                port.position.set(-0.85, bodyY + bodyHeight / 2 - 0.02, 0.05);
+                carGroup.add(port);
+            }
+
+            // Roof rails (suv)
+            if (type === 'suv') {
+                const rail = new THREE.Mesh(new THREE.BoxGeometry(1.3, 0.05, 0.05), chromeMat);
+                rail.position.set(0, cabinY + cabinHeight / 2 + 0.025, 0);
+                carGroup.add(rail);
+            }
+
+            return carGroup;
         }
-        // Lower point triangle-ish (use a cone)
-        const point = new THREE.Mesh(new THREE.ConeGeometry(0.15, 0.22, 8), heartMat);
-        point.rotation.x = -Math.PI / 2;
-        point.rotation.z = Math.PI;
-        point.position.set(0, 0.326, 0.12);
-        heartGroup.add(point);
-        cupGroup.add(heartGroup);
 
-        // Saucer
-        const saucerGeo = new THREE.CylinderGeometry(1.2, 1.2, 0.14, 64);
-        const saucerMat = new THREE.MeshStandardMaterial({ color: cupColor, roughness: 0.25, metalness: 0.08 });
-        const saucer = new THREE.Mesh(saucerGeo, saucerMat);
-        saucer.position.y = -0.93;
-        saucer.receiveShadow = true;
-        cupGroup.add(saucer);
-
-        // Spoon on saucer
-        const spoonGroup = new THREE.Group();
-        const spoonMat = new THREE.MeshStandardMaterial({ color: 0xb8b4ac, roughness: 0.15, metalness: 0.8 });
-        const spoonHandle = new THREE.Mesh(new THREE.CylinderGeometry(0.02, 0.02, 0.9, 12), spoonMat);
-        spoonHandle.rotation.z = Math.PI / 2;
-        spoonHandle.position.set(-0.55, -0.86, 0);
-        spoonGroup.add(spoonHandle);
-        const spoonBowl = new THREE.Mesh(new THREE.TorusGeometry(0.1, 0.02, 12, 32, Math.PI), spoonMat);
-        spoonBowl.rotation.x = Math.PI / 2;
-        spoonBowl.rotation.z = Math.PI / 4;
-        spoonBowl.position.set(-1.05, -0.86, 0.18);
-        spoonGroup.add(spoonBowl);
-        spoonBowl.castShadow = true;
-        spoonHandle.castShadow = true;
-        cupGroup.add(spoonGroup);
-
-        // Sugar cubes
-        const sugarGeo = new THREE.BoxGeometry(0.09, 0.05, 0.09);
-        const sugarMat = new THREE.MeshStandardMaterial({ color: 0xe8e2d8, roughness: 0.6 });
-        const sugarPositions = [
-            [-0.65, -0.85, 0.45], [0.55, -0.85, 0.48], [-0.4, -0.85, -0.4]
-        ];
-        sugarPositions.forEach(([x, y, z]) => {
-            const cube = new THREE.Mesh(sugarGeo, sugarMat);
-            cube.position.set(x, y, z);
-            cube.rotation.y = Math.random() * 0.8;
-            cube.castShadow = true;
-            cupGroup.add(cube);
-        });
+        const currentCar = buildCar('sedan');
 
         // Reflective floor
-        const floorGeo = new THREE.PlaneGeometry(50, 50);
-        const floorMat = new THREE.MeshStandardMaterial({ color: 0x0a0806, roughness: 0.08, metalness: 0.9 });
+        const floorGeo = new THREE.PlaneGeometry(60, 60);
+        const floorMat = new THREE.MeshStandardMaterial({ color: 0x08080a, roughness: 0.06, metalness: 0.95 });
         const floor = new THREE.Mesh(floorGeo, floorMat);
         floor.rotation.x = -Math.PI / 2;
-        floor.position.y = -1.12;
+        floor.position.y = -0.85;
         floor.receiveShadow = true;
         scene.add(floor);
 
-        // Beans orbiting
-        const beanGroup = new THREE.Group();
-        scene.add(beanGroup);
-
-        const beanGeo = new THREE.SphereGeometry(0.12, 10, 10);
-        const beanMat = new THREE.MeshStandardMaterial({ color: 0x2d1407, roughness: 0.5, metalness: 0.25 });
-        const beans = [];
-        const beanCount = 20;
-        for (let i = 0; i < beanCount; i++) {
-            const bean = new THREE.Mesh(beanGeo, beanMat);
-            bean.scale.set(1, 0.5, 0.8);
-            const phi = Math.acos(-1 + (2 * i) / beanCount);
-            const theta = Math.sqrt(beanCount * Math.PI) * phi;
-            const r = 3.0;
-            bean.position.set(
-                r * Math.sin(phi) * Math.cos(theta),
-                r * Math.sin(phi) * Math.sin(theta) * 0.55,
-                r * Math.cos(phi)
-            );
-            bean.lookAt(0, 0, 0);
-            bean.castShadow = true;
-            beanGroup.add(bean);
-            beans.push({ mesh: bean, angle: i * 0.4, speed: 0.001 + Math.random() * 0.0012, baseR: r });
+        // Particles
+        const particleCount = 120;
+        const particleGeo = new THREE.BufferGeometry();
+        const particlePos = new Float32Array(particleCount * 3);
+        const particleLife = new Float32Array(particleCount);
+        const particleSize = new Float32Array(particleCount);
+        for (let i = 0; i < particleCount; i++) {
+            particlePos[i * 3] = (Math.random() - 0.5) * 30;
+            particlePos[i * 3 + 1] = (Math.random() - 0.5) * 16;
+            particlePos[i * 3 + 2] = (Math.random() - 0.5) * 14;
+            particleLife[i] = Math.random();
+            particleSize[i] = 0.02 + Math.random() * 0.05;
         }
+        particleGeo.setAttribute('position', new THREE.BufferAttribute(particlePos, 3));
+        particleGeo.setAttribute('aLife', new THREE.BufferAttribute(particleLife, 1));
+        particleGeo.setAttribute('aSize', new THREE.BufferAttribute(particleSize, 1));
 
-        // Dust motes
-        const dustCount = 100;
-        const dustGeo = new THREE.BufferGeometry();
-        const dustPos = new Float32Array(dustCount * 3);
-        const dustLife = new Float32Array(dustCount);
-        const dustSize = new Float32Array(dustCount);
-        for (let i = 0; i < dustCount; i++) {
-            dustPos[i * 3] = (Math.random() - 0.5) * 24;
-            dustPos[i * 3 + 1] = (Math.random() - 0.5) * 14;
-            dustPos[i * 3 + 2] = (Math.random() - 0.5) * 12;
-            dustLife[i] = Math.random();
-            dustSize[i] = 0.02 + Math.random() * 0.05;
-        }
-        dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
-        dustGeo.setAttribute('aLife', new THREE.BufferAttribute(dustLife, 1));
-        dustGeo.setAttribute('aSize', new THREE.BufferAttribute(dustSize, 1));
-
-        const dustMat = new THREE.ShaderMaterial({
-            uniforms: { uTime: { value: 0 }, uColor: { value: new THREE.Color(0xefe4dd) } },
+        const particleMat = new THREE.ShaderMaterial({
+            uniforms: { uTime: { value: 0 }, uColor: { value: new THREE.Color(0xd4af37) } },
             vertexShader: `
                 attribute float aLife;
                 attribute float aSize;
@@ -941,14 +868,14 @@
                 varying float vAlpha;
                 void main() {
                     vec3 pos = position;
-                    float t = uTime * 0.18 + aLife * 6.0;
-                    pos.y += sin(t) * 0.5;
-                    pos.x += cos(t * 0.6) * 0.18;
-                    pos.z += sin(t * 0.4) * 0.18;
-                    float fade = 0.4 + 0.6 * sin(t + aLife);
-                    vAlpha = fade * 0.35;
+                    float t = uTime * 0.15 + aLife * 7.0;
+                    pos.y += sin(t) * 0.6;
+                    pos.x += cos(t * 0.5) * 0.2;
+                    pos.z += sin(t * 0.3) * 0.2;
+                    float fade = 0.3 + 0.7 * sin(t + aLife);
+                    vAlpha = fade * 0.4;
                     vec4 mvPos = modelViewMatrix * vec4(pos, 1.0);
-                    gl_PointSize = aSize * (350.0 / -mvPos.z);
+                    gl_PointSize = aSize * (400.0 / -mvPos.z);
                     gl_Position = projectionMatrix * mvPos;
                 }
             `,
@@ -964,89 +891,21 @@
             transparent: true,
             depthWrite: false
         });
-        const dust = new THREE.Points(dustGeo, dustMat);
-        scene.add(dust);
+        const particles = new THREE.Points(particleGeo, particleMat);
+        scene.add(particles);
 
-        // Steam
-        const steamCount = 50;
-        const steamGeo = new THREE.BufferGeometry();
-        const steamPos = new Float32Array(steamCount * 3);
-        const steamLife = new Float32Array(steamCount);
-        const steamSize = new Float32Array(steamCount);
-        const steamOffset = new Float32Array(steamCount);
-        for (let i = 0; i < steamCount; i++) {
-            steamPos[i * 3] = (Math.random() - 0.5) * 0.22;
-            steamPos[i * 3 + 1] = Math.random() * 1.8 + 0.35;
-            steamPos[i * 3 + 2] = (Math.random() - 0.5) * 0.22;
-            steamLife[i] = Math.random();
-            steamSize[i] = 0.04 + Math.random() * 0.06;
-            steamOffset[i] = Math.random() * Math.PI * 2;
-        }
-        steamGeo.setAttribute('position', new THREE.BufferAttribute(steamPos, 3));
-        steamGeo.setAttribute('aLife', new THREE.BufferAttribute(steamLife, 1));
-        steamGeo.setAttribute('aSize', new THREE.BufferAttribute(steamSize, 1));
-        steamGeo.setAttribute('aOffset', new THREE.BufferAttribute(steamOffset, 1));
-
-        const steamMat = new THREE.ShaderMaterial({
-            uniforms: {
-                uTime: { value: 0 },
-                uBrew: { value: 0 },
-                uColor: { value: new THREE.Color(0xf2e8dc) }
-            },
-            vertexShader: `
-                attribute float aLife;
-                attribute float aSize;
-                attribute float aOffset;
-                uniform float uTime;
-                uniform float uBrew;
-                varying float vAlpha;
-                void main() {
-                    vec3 pos = position;
-                    float t = uTime * 0.5 + aLife * 2.8 + aOffset;
-                    float brew = 1.0 + uBrew * 1.8;
-                    float lift = sin(t) * (0.8 * brew);
-                    pos.y += lift;
-                    pos.x += sin(t * 1.5 + aOffset) * (0.06 * brew);
-                    pos.z += cos(t * 1.1 + aOffset) * (0.06 * brew);
-                    float cycle = fract(t / 2.4);
-                    float fade = 1.0 - cycle;
-                    vAlpha = fade * 0.8;
-                    vec4 mvPos = modelViewMatrix * vec4(pos, 1.0);
-                    gl_PointSize = aSize * (1.0 + lift * 0.6) * (350.0 / -mvPos.z);
-                    gl_Position = projectionMatrix * mvPos;
-                }
-            `,
-            fragmentShader: `
-                uniform vec3 uColor;
-                varying float vAlpha;
-                void main() {
-                    float r = distance(gl_PointCoord, vec2(0.5));
-                    float alpha = vAlpha * (1.0 - smoothstep(0.0, 0.6, r));
-                    gl_FragColor = vec4(uColor, alpha);
-                }
-            `,
-            transparent: true,
-            depthWrite: false
-        });
-        const steam = new THREE.Points(steamGeo, steamMat);
-        cupGroup.add(steam);
-
-        const glowGeo = new THREE.PlaneGeometry(18, 18);
+        const glowGeo = new THREE.PlaneGeometry(20, 20);
         const glowMat = new THREE.MeshBasicMaterial({
-            color: 0xc9a227, transparent: true, opacity: 0, blending: THREE.AdditiveBlending
+            color: 0xd4af37, transparent: true, opacity: 0, blending: THREE.AdditiveBlending
         });
         const glow = new THREE.Mesh(glowGeo, glowMat);
-        glow.position.z = -2.5;
+        glow.position.z = -3;
         scene.add(glow);
 
         // Interaction
         const mouse = new THREE.Vector2(0, 0);
         const target = new THREE.Vector2(0, 0);
         let scrollY = 0;
-        let brew = 0;
-        let brewTarget = 0;
-
-        const raycaster = new THREE.Raycaster();
 
         window.addEventListener('mousemove', (e) => {
             mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -1070,67 +929,33 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        function triggerBrew() { brewTarget = 1; }
-
-        window.addEventListener('mousedown', (e) => {
-            if (e.target.closest('a, button, .menu-btn')) return;
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects([cup, rim, liquid, foam, heartGroup], true);
-            if (intersects.length > 0) triggerBrew();
-        });
-
-        window.addEventListener('touchstart', (e) => {
-            raycaster.setFromCamera(mouse, camera);
-            const intersects = raycaster.intersectObjects([cup, rim, liquid, foam, heartGroup], true);
-            if (intersects.length > 0) triggerBrew();
-        }, { passive: true });
-
         const clock = new THREE.Clock();
 
         function animate() {
             requestAnimationFrame(animate);
             const t = clock.getElapsedTime();
 
-            brew += (brewTarget - brew) * 0.05;
-            if (brewTarget === 0 && brew < 0.01) brew = 0;
-            steamMat.uniforms.uBrew.value = brew;
-            steamMat.uniforms.uTime.value = t;
-            dustMat.uniforms.uTime.value = t;
+            carGroup.rotation.y += 0.003;
+            carGroup.rotation.x = Math.sin(t * 0.3) * 0.015;
+            carGroup.position.y = Math.sin(t * 0.9) * 0.015;
 
-            cupGroup.rotation.y += 0.005 * (1 + brew * 0.6);
-            cupGroup.rotation.x = Math.sin(t * 0.45) * 0.02;
-            cupGroup.position.y = Math.sin(t * 1.0) * 0.018 * (1 + brew);
-
-            if (brew > 0) {
-                liquid.scale.set(1 + Math.sin(t * 14) * 0.012 * brew, 1, 1 + Math.cos(t * 14) * 0.012 * brew);
-            } else {
-                liquid.scale.set(1, 1, 1);
-            }
-
-            // Latte art subtle float
-            heartGroup.position.y = 0.326 + Math.sin(t * 2) * 0.008;
-
-            beans.forEach((b, i) => {
-                b.angle += b.speed * (1 + brew * 3);
-                b.mesh.position.x = Math.cos(b.angle + i) * b.baseR;
-                b.mesh.position.z = Math.sin(b.angle + i) * b.baseR;
-                b.mesh.position.y = 0.45 + Math.sin(b.angle * 1.6 + i) * (0.14 + brew * 0.1);
-                b.mesh.lookAt(0, 0, 0);
+            // Wheel spin
+            carGroup.children.forEach(child => {
+                if (child.isMesh && child.geometry.type === 'CylinderGeometry' && child.material === tireMat) {
+                    child.rotation.z += 0.08;
+                }
             });
 
-            steam.position.set(0, 0.62 + Math.sin(t * 1.1) * 0.02 * (1 + brew), 0);
+            particles.rotation.y = t * 0.02;
 
             target.x += (mouse.x - target.x) * 0.05;
             target.y += (mouse.y - target.y) * 0.05;
 
-            camera.position.x = target.x * 1.0;
-            camera.position.y = target.y * 0.9;
+            camera.position.x = target.x * 0.9;
+            camera.position.y = 1.6 + target.y * 0.7;
             camera.lookAt(0, 0, 0);
 
-            cupGroup.position.x = -target.x * 0.3;
-            cupGroup.position.y = -target.y * 0.18 + Math.sin(t) * 0.03 * (1 + brew);
-
-            glow.material.opacity = THREE.MathUtils.clamp((scrollY - 300) / 700, 0, 0.28) + brew * 0.12;
+            glow.material.opacity = THREE.MathUtils.clamp((scrollY - 300) / 700, 0, 0.25);
 
             renderer.render(scene, camera);
         }
@@ -1147,7 +972,7 @@
         reveals.forEach(el => observer.observe(el));
 
         /* ---------- Card 3D tilt ---------- */
-        document.querySelectorAll('.card').forEach(card => {
+        document.querySelectorAll('.fleet-card').forEach(card => {
             card.addEventListener('mousemove', (e) => {
                 const rect = card.getBoundingClientRect();
                 const x = e.clientX - rect.left;
