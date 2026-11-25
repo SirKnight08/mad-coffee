@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mad Coffee — Awaken Your Senses</title>
+    <style>
+        :root {
+            --bg: #0a0807;
+            --ink: #f5f1ea;
+            --accent: #c9a227;
+            --accent-glow: rgba(201, 162, 39, 0.35);
+            --coffee: #4b2e1f;
+            --cream: #d7ccc8;
+            --font-main: 'Playfair Display', serif;
+            --font-ui: 'Inter', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--ink);
+            font-family: var(--font-ui);
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        canvas { display: block; }
+
+        #webgl {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        h1, h2, h3, .serif { font-family: var(--font-main); }
+
+        .layer {
+            position: relative;
+            z-index: 10;
+            isolation: isolate;
+        }
+
+        /* ---- Preloader ---- */
+        #preloader {
+            position: fixed; inset: 0;
+            background: var(--bg);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+        }
+
+        #preloader.loaded {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .preloader-logo {
+            font-family: var(--font-main);
+            font-size: 1.7rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .preloader-logo mark { background: var(--accent); color: var(--bg); padding: 0 0.4em; }
+
+        .preloader-ring {
+            width: 56px; height: 56px;
+            border: 2px solid rgba(201,162,39,0.15);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            box-shadow: 0 0 20px var(--accent-glow);
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .preloader-text {
+            margin-top: 1.5rem;
+            font-size: 0.8rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: rgba(245,241,234,0.45);
+        }
+
+        /* ---- Header ---- */
+        header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            padding: 1.5rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 60;
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(245, 241, 234, 0.06);
+            transition: background 0.4s, border-color 0.4s;
+        }
+
+        header.scrolled {
+            background: rgba(10, 8, 7, 0.85);
+            border-bottom-color: rgba(245, 241, 234, 0.15);
+        }
+
+        .logo {
+            font-family: var(--font-main);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.04em;
+            color: var(--ink);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            z-index: 10;
+        }
+
+        .logo mark { background: var(--accent); color: var(--bg); padding: 0 0.35em; font-weight: 800; }
+
+        nav a {
+            color: var(--ink);
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-left: 2.5rem;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        nav a::after {
+            content: ''; position: absolute; left: 0; bottom: -4px;
+            width: 0; height: 1px; background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover { color: var(--accent); }
+        nav a:hover::after { width: 100%; }
+        nav a.active { color: var(--accent); }
+        nav a.active::after { width: 100%; }
+
+        .menu-btn {
+            background: none; border: 1px solid rgba(245,241,234,0.25);
+            color: var(--ink); padding: 0.6rem 1.1rem;
+            font-family: var(--font-ui); font-size: 0.85rem;
+            border-radius: 40px; cursor: pointer;
+            transition: all 0.3s; z-index: 10;
+        }
+
+        .menu-btn:hover { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+
+        /* Mobile hamburger */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            z-index: 10;
+            padding: 0.4rem;
+        }
+
+        .hamburger span {
+            display: block; width: 22px; height: 2px;
+            background: var(--ink); border-radius: 2px;
+            transition: all 0.3s;
+        }
+
+        .mobile-menu {
+            position: fixed; top: 0; right: -100%; width: 100%; max-width: 320px;
+            height: 100vh; background: rgba(10, 8, 7, 0.97);
+            backdrop-filter: blur(16px);
+            z-index: 55;
+            padding: 4rem 2.5rem 2rem;
+            display: flex; flex-direction: column;
+            transition: right 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+            border-left: 1px solid rgba(245,241,234,0.08);
+        }
+
+        .mobile-menu.open { right: 0; }
+
+        .mobile-menu .close-btn {
+            align-self: flex-start;
+            background: none; border: none;
+            color: var(--ink); font-size: 1.5rem;
+            cursor: pointer; padding: 0.5rem;
+        }
+
+        .mobile-menu nav {
+            display: flex; flex-direction: column; margin-top: 2rem;
+        }
+
+        .mobile-menu nav a {
+            font-size: 1.4rem; margin: 1.2rem 0 0;
+            font-family: var(--font-main); font-weight: 700;
+        }
+
+        .mobile-menu nav a.active { color: var(--accent); }
+
+        .mobile-menu .menu-btn {
+            margin-top: 2.5rem; align-self: flex-start;
+            width: fit-content;
+        }
+
+        /* ---- Hero ---- */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 3rem;
+            overflow: hidden;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 20;
+            max-width: 700px;
+        }
+
+        .kicker {
+            font-size: 0.85rem; letter-spacing: 0.45em; text-transform: uppercase;
+            color: var(--accent); font-weight: 600; margin-bottom: 1.2rem;
+            opacity: 0; transform: translateY(20px);
+            animation: fadeUp 1s 0.2s forwards ease-out;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 7rem);
+            line-height: 0.95; letter-spacing: -0.03em;
+            margin-bottom: 1.5rem;
+            opacity: 0; transform: translateY(30px);
+            animation: fadeUp 1s 0.4s forwards ease-out;
+        }
+
+        h1 .accent { color: var(--accent); }
+
+        .hero p {
+            font-size: 1.25rem; line-height: 1.6;
+            color: rgba(245,241,234,0.7); max-width: 520px;
+            margin-bottom: 2.5rem;
+            opacity: 0; transform: translateY(30px);
+            animation: fadeUp 1s 0.6s forwards ease-out;
+        }
+
+        .cta-group { display: flex; gap: 1rem; flex-wrap: wrap;
+            opacity: 0; transform: translateY(30px);
+            animation: fadeUp 1s 0.8s forwards ease-out;
+        }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 1rem 1.75rem; border-radius: 40px;
+            font-weight: 600; font-size: 1rem; text-decoration: none;
+            transition: all 0.3s; cursor: pointer;
+        }
+
+        .btn-primary { background: var(--accent); color: var(--bg); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 30px var(--accent-glow); }
+
+        .btn-ghost { border: 1px solid rgba(245,241,234,0.35); color: var(--ink); background: transparent; }
+        .btn-ghost:hover { background: rgba(245,241,234,0.08); border-color: var(--ink); }
+
+        .mouse-hint {
+            position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%);
+            font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase;
+            color: rgba(245,241,234,0.4); z-index: 20;
+            animation: bounce 2.5s infinite;
+        }
+
+        /* ---- Section base ---- */
+        section { position: relative; padding: 140px 3rem; }
+
+        .section-head {
+            text-align: center; max-width: 600px; margin: 0 auto 4rem;
+        }
+
+        .section-head .kicker {
+            display: block; font-size: 0.8rem; letter-spacing: 0.5em;
+            text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;
+        }
+
+        .section-head h2 {
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1.5rem;
+        }
+
+        .section-head p {
+            color: rgba(245,241,234,0.65); font-size: 1.15rem; line-height: 1.7;
+        }
+
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s ease-out; }
+        .reveal.active { opacity: 1; transform: none; }
+        .reveal-delay { transition-delay: 0.2s; }
+
+        /* ---- About ---- */
+        .about-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+        }
+
+        @media (max-width: 900px) { .about-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
+
+        .about-img {
+            height: 460px; border-radius: 30px;
+            background: linear-gradient(135deg, var(--coffee), #2a1a12);
+            position: relative; overflow: hidden;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
+        }
+
+        .about-img img { width: 100%; height: 100%; object-fit: cover; opacity: 0.55; }
+
+        .about-img::after {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at 40% 40%, rgba(201,162,39,0.15), transparent 60%);
+            pointer-events: none;
+        }
+
+        .about-text h3 { font-size: 2rem; margin-bottom: 1.2rem; line-height: 1.2; }
+        .about-text p { color: rgba(245,241,234,0.75); line-height: 1.8; margin-bottom: 1.5rem; font-size: 1.1rem; }
+
+        .stats {
+            display: flex; gap: 2.5rem; margin-top: 2.5rem;
+        }
+
+        .stat .num { font-family: var(--font-main); font-size: 2rem; font-weight: 700; color: var(--accent); display: block; }
+        .stat .lbl { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(245,241,234,0.55); }
+
+        /* ---- Menu ---- */
+        .menu-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2rem; max-width: 1000px; margin: 0 auto;
+        }
+
+        .card {
+            background: rgba(245,241,234,0.03);
+            border: 1px solid rgba(245,241,234,0.08);
+            border-radius: 24px; padding: 2rem; position: relative;
+            overflow: hidden; transition: transform 0.4s, border-color 0.4s;
+            cursor: default;
+        }
+
+        .card:hover { transform: translateY(-8px); border-color: var(--accent); }
+
+        .card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 80% -10%, rgba(201,162,39,0.1), transparent 55%);
+            opacity: 0; transition: opacity 0.4s; pointer-events: none;
+        }
+
+        .card:hover::before { opacity: 1; }
+
+        .badge {
+            display: inline-block; font-size: 0.7rem; letter-spacing: 0.2em;
+            text-transform: uppercase; color: var(--accent); font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .card h3 { font-size: 1.4rem; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+        .card p { color: rgba(245,241,234,0.65); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; }
+
+        .price { font-family: var(--font-main); font-size: 1.5rem; font-weight: 700; color: var(--ink); }
+
+        /* ---- Contact ---- */
+        .contact-wrap {
+            max-width: 600px; margin: 0 auto; text-align: center;
+        }
+
+        .contact-wrap h2 { font-size: 3rem; margin-bottom: 1rem; letter-spacing: -0.02em; }
+        .contact-wrap p { color: rgba(245,241,234,0.7); margin-bottom: 3rem; font-size: 1.2rem; }
+
+        .contact-card {
+            background: rgba(255,255,255,0.03); border: 1px solid rgba(245,241,234,0.1);
+            border-radius: 30px; padding: 3rem; margin-bottom: 3rem;
+        }
+
+        .contact-item { display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.5rem; }
+        .contact-item .dot { width: 10px; height: 10px; background: var(--accent); border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 15px var(--accent-glow); }
+        .contact-item a { color: var(--ink); text-decoration: none; font-size: 1.1rem; }
+        .contact-item a:hover { color: var(--accent); }
+
+        .social { display: flex; justify-content: center; gap: 1.5rem; }
+        .social a {
+            width: 44px; height: 44px; border-radius: 50%;
+            border: 1px solid rgba(245,241,234,0.2); color: var(--ink);
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; font-size: 1.2rem; transition: all 0.3s;
+        }
+        .social a:hover { background: var(--accent); border-color: var(--accent); color: var(--bg); transform: translateY(-3px); }
+
+        /* ---- Footer ---- */
+        footer {
+            padding: 3rem; border-top: 1px solid rgba(245,241,234,0.08);
+            text-align: center; color: rgba(245,241,234,0.4); font-size: 0.85rem;
+        }
+
+        /* ---- Animations ---- */
+        @keyframes fadeUp {
+            to { opacity: 1; transform: none; }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateX(-50%) translateY(0); }
+            50% { transform: translateX(-50%) translateY(-8px); }
+        }
+
+        /* scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg); }
+        ::-webkit-scrollbar-thumb { background: var(--coffee); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+        @media (max-width: 640px) {
+            header { padding: 1.25rem 1.5rem; }
+            nav { display: none; }
+            .menu-btn { padding: 0.5rem 0.9rem; font-size: 0.75rem; }
+            .hamburger { display: flex; }
+            section { padding: 100px 1.5rem; }
+            .stats { flex-direction: column; gap: 1.5rem; align-items: flex-start; }
+            .contact-card { padding: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="preloader-logo">M<span style="color:var(--accent)">A</span>D Coffee</div>
+        <div class="preloader-ring"></div>
+        <div class="preloader-text">Brewing the experience</div>
+    </div>
+
+    <canvas id="webgl"></canvas>
+
+    <header id="header" class="layer">
+        <a href="#" class="logo" onclick="scrollToSection('home'); return false;">M<span style="color:var(--accent)">A</span>D Coffee</a>
+        <nav id="main-nav">
+            <a href="#about">About</a>
+            <a href="#menu">Menu</a>
+            <a href="#contact">Contact</a>
+        </nav>
+        <button class="hamburger" id="hamburger" aria-label="Open menu">
+            <span></span><span></span><span></span>
+        </button>
+        <button class="menu-btn" onclick="scrollToSection('menu'); return false;">View Menu</button>
+    </header>
+
+    <div class="mobile-menu" id="mobile-menu">
+        <button class="close-btn" id="close-mobile" aria-label="Close menu">&times;</button>
+        <nav>
+            <a href="#about" onclick="closeMobile()">About</a>
+            <a href="#menu" onclick="closeMobile()">Menu</a>
+            <a href="#contact" onclick="closeMobile()">Contact</a>
+        </nav>
+        <button class="menu-btn" onclick="closeMobile(); scrollToSection('menu');">View Menu</button>
+    </div>
+
+    <section class="hero layer" id="home">
+        <div class="hero-content">
+            <div class="kicker">Specialty Coffee Roastery</div>
+            <h1>Mad <span class="accent">Coffee</span><br>For the Curious Soul</h1>
+            <p>Small-batch roasted beans, ethically sourced and brewed with obsession. Step into a darker, richer ritual.</p>
+            <div class="cta-group">
+                <a href="#menu" class="btn btn-primary" onclick="scrollToSection('menu'); return false;">Explore the Roast</a>
+                <a href="#about" class="btn btn-ghost" onclick="scrollToSection('about'); return false;">Our Story</a>
+            </div>
+        </div>
+        <div class="mouse-hint">move your mouse &middot; tap the cup</div>
+    </section>
+
+    <section id="about" class="layer">
+        <div class="section-head reveal">
+            <span class="kicker">About Us</span>
+            <h2>Brewed with<br>Obsession</h2>
+            <p>We roast in the quiet hours, chasing the perfect crack. Every bean tells a story of altitude, soil, and patience. Mad Coffee is where ritual meets rebellion.</p>
+        </div>
+        <div class="about-grid">
+            <div class="about-img reveal">
+                <img src="https://images.unsplash.com/photo-1495474472287-4d71bc821562?auto=format&fit=crop&w=800&q=80" alt="Coffee beans">
+            </div>
+            <div class="about-text reveal reveal-delay">
+                <h3>From farm to cup</h3>
+                <p>We partner directly with farms in Ethiopia, Colombia, and Guatemala. No middlemen, no compromise—just green beans chosen by hand and roasted in small batches to unlock their true character.</p>
+                <p>Our cafe is open dawn to dusk. Come for the espresso, stay for the silence.</p>
+                <div class="stats">
+                    <div class="stat"><span class="num">2018</span><span class="lbl">Founded</span></div>
+                    <div class="stat"><span class="num">12+</span><span class="lbl">Origins</span></div>
+                    <div class="stat"><span class="num">50k</span><span class="lbl">Cups served</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="menu" class="layer">
+        <div class="section-head reveal">
+            <span class="kicker">The Roast List</span>
+            <h2>Seasonal<br>Offerings</h2>
+        </div>
+        <div class="menu-grid">
+            <article class="card reveal">
+                <span class="badge">Espresso</span>
+                <h3>Madhouse Blend</h3>
+                <p>Chocolate, red apple, and a lingering hint of tobacco. Our signature pull—bold without bitterness.</p>
+                <span class="price">$4.50</span>
+            </article>
+            <article class="card reveal reveal-delay">
+                <span class="badge">Filter</span>
+                <h3>Yirgacheffe Light</h3>
+                <p>Floral and citrus-forward with jasmine aromatics. Best enjoyed black, slow.</p>
+                <span class="price">$5.00</span>
+            </article>
+            <article class="card reveal">
+                <span class="badge">Cold Brew</span>
+                <h3>Midnight Steep</h3>
+                <p>Steeped 18 hours. Syrupy body, dark cherry notes, served over a single large cube.</p>
+                <span class="price">$5.50</span>
+            </article>
+            <article class="card reveal reveal-delay">
+                <span class="badge">Signature</span>
+                <h3>Mad Affogato</h3>
+                <p>Two shots of hot espresso poured over vanilla bean gelato. Bitter meets sweet in a glass.</p>
+                <span class="price">$7.00</span>
+            </article>
+        </div>
+    </section>
+
+    <section id="contact" class="layer">
+        <div class="contact-wrap">
+            <div class="section-head reveal" style="text-align:center;">
+                <span class="kicker">Visit Us</span>
+                <h2>Find the<br>Cafe</h2>
+            </div>
+            <div class="contact-card reveal reveal-delay">
+                <div class="contact-item">
+                    <div class="dot"></div>
+                    <div>
+                        <div style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.2em;color:var(--accent);font-weight:700;">Address</div>
+                        <a href="https://maps.google.com" target="_blank">42 Roastery Lane, Downtown</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="dot"></div>
+                    <div>
+                        <div style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.2em;color:var(--accent);font-weight:700;">Hours</div>
+                        <a>Daily 7:00 &mdash; 19:00</a>
+                    </div>
+                </div>
+                <div class="contact-item">
+                    <div class="dot"></div>
+                    <div>
+                        <div style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.2em;color:var(--accent);font-weight:700;">Email</div>
+                        <a href="mailto:hello@madcoffee.example">hello@madcoffee.example</a>
+                    </div>
+                </div>
+            </div>
+            <div class="social reveal">
+                <a href="#" aria-label="Instagram">&#128247;</a>
+                <a href="#" aria-label="Twitter">&#128278;</a>
+                <a href="#" aria-label="TikTok">&#128242;</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="layer">
+        Mad Coffee &middot; Roasted with obsession. &copy; <span id="year"></span>
+    </footer>
+
+    <!-- Three.js (global UMD build - works when opened directly) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        /* ---------- Navigation helpers ---------- */
+        function scrollToSection(id) {
+            const el = document.getElementById(id);
+            if (el) el.scrollIntoView({ behavior: 'smooth' });
+            closeMobile();
+        }
+
+        function setActiveNav() {
+            const sections = document.querySelectorAll('section[id]');
+            const links = document.querySelectorAll('#main-nav a, #mobile-menu nav a');
+            let current = null;
+            sections.forEach(sec => {
+                const rect = sec.getBoundingClientRect();
+                if (rect.top <= 150 && rect.bottom >= 150) current = sec.id;
+            });
+            links.forEach(a => {
+                const match = a.getAttribute('href') === '#' + current;
+                a.classList.toggle('active', match);
+            });
+        }
+
+        /* ---------- Mobile menu ---------- */
+        const hamburger = document.getElementById('hamburger');
+        const closeMobileBtn = document.getElementById('close-mobile');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        function openMobile() { mobileMenu.classList.add('open'); hamburger.setAttribute('aria-expanded', 'true'); }
+        function closeMobile() { mobileMenu.classList.remove('open'); hamburger.setAttribute('aria-expanded', 'false'); }
+
+        hamburger.addEventListener('click', openMobile);
+        closeMobileBtn.addEventListener('click', closeMobile);
+
+        /* ---------- Header scroll state ---------- */
+        const header = document.getElementById('header');
+        window.addEventListener('scroll', () => {
+            header.classList.toggle('scrolled', window.scrollY > 60);
+            setActiveNav();
+        });
+
+        /* ---------- Three.js Scene ---------- */
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
+        camera.position.z = 4.5;
+
+        const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('webgl'), alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        renderer.toneMapping = THREE.ACESFilmicToneMapping;
+        renderer.outputColorSpace = THREE.SRGBColorSpace;
+        renderer.shadowMap.enabled = true;
+        renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+        // Lights
+        const ambient = new THREE.AmbientLight(0xffffff, 0.3);
+        scene.add(ambient);
+
+        const keyLight = new THREE.DirectionalLight(0xffffff, 1.4);
+        keyLight.position.set(3, 6, 4);
+        keyLight.castShadow = true;
+        keyLight.shadow.mapSize.width = 1024;
+        keyLight.shadow.mapSize.height = 1024;
+        keyLight.shadow.camera.near = 0.5;
+        keyLight.shadow.camera.far = 20;
+        keyLight.shadow.camera.left = -6;
+        keyLight.shadow.camera.right = 6;
+        keyLight.shadow.camera.top = 6;
+        keyLight.shadow.camera.bottom = -6;
+        scene.add(keyLight);
+
+        const fillLight = new THREE.PointLight(0xc9a227, 2.5, 12);
+        fillLight.position.set(-2, 1, 2);
+        fillLight.castShadow = false;
+        scene.add(fillLight);
+
+        const rimLight = new THREE.SpotLight(0xffffff, 10, 16, 0.45, 0.5, 1);
+        rimLight.position.set(0, 3, -3);
+        rimLight.lookAt(0, 0, 0);
+        rimLight.castShadow = false;
+        scene.add(rimLight);
+
+        // ---- Coffee cup group ----
+        const cupGroup = new THREE.Group();
+        scene.add(cupGroup);
+
+        const cupColor = new THREE.Color(0x16100b);
+        const liquidColor = new THREE.Color(0x3d2316);
+
+        const cupGeo = new THREE.CylinderGeometry(0.75, 0.62, 1.1, 32);
+        const cupMat = new THREE.MeshStandardMaterial({ color: cupColor, roughness: 0.5, metalness: 0.15 });
+        const cup = new THREE.Mesh(cupGeo, cupMat);
+        cup.position.y = -0.25;
+        cup.castShadow = true; cup.receiveShadow = true;
+        cupGroup.add(cup);
+
+        const rimGeo = new THREE.TorusGeometry(0.77, 0.05, 16, 64, 0.35);
+        const rimMat = new THREE.MeshStandardMaterial({ color: 0x4a3426, roughness: 0.3, metalness: 0.5 });
+        const rim = new THREE.Mesh(rimGeo, rimMat);
+        rim.rotation.x = Math.PI / 2;
+        rim.position.y = 0.3;
+        rim.castShadow = true;
+        cupGroup.add(rim);
+
+        const handleGeo = new THREE.TorusGeometry(0.22, 0.035, 12, 64, Math.PI);
+        const handle = new THREE.Mesh(handleGeo, cupMat);
+        handle.rotation.x = Math.PI / 2;
+        handle.position.set(1.05, -0.25, 0);
+        handle.castShadow = true;
+        cupGroup.add(handle);
+
+        const liquidGeo = new THREE.CylinderGeometry(0.7, 0.7, 0.12, 32);
+        const liquidMat = new THREE.MeshStandardMaterial({ color: liquidColor, roughness: 0.2, metalness: 0.1 });
+        const liquid = new THREE.Mesh(liquidGeo, liquidMat);
+        liquid.position.y = 0.24;
+        liquid.castShadow = true;
+        cupGroup.add(liquid);
+
+        const foamGeo = new THREE.CylinderGeometry(0.73, 0.73, 0.05, 32);
+        const foamMat = new THREE.MeshStandardMaterial({ color: 0x5a3e2b, roughness: 0.6, metalness: 0.05 });
+        const foam = new THREE.Mesh(foamGeo, foamMat);
+        foam.position.y = 0.31;
+        cupGroup.add(foam);
+
+        const saucerGeo = new THREE.CylinderGeometry(1.15, 1.15, 0.12, 32);
+        const saucerMat = new THREE.MeshStandardMaterial({ color: cupColor, roughness: 0.5, metalness: 0.1 });
+        const saucer = new THREE.Mesh(saucerGeo, saucerMat);
+        saucer.position.y = -0.9;
+        saucer.receiveShadow = true;
+        cupGroup.add(saucer);
+
+        // ---- Floating beans ----
+        const beanGroup = new THREE.Group();
+        scene.add(beanGroup);
+
+        const beanGeo = new THREE.SphereGeometry(0.11, 8, 8);
+        const beanMat = new THREE.MeshStandardMaterial({ color: 0x2d1407, roughness: 0.55, metalness: 0.2 });
+        const beans = [];
+        const beanCount = 16;
+        for (let i = 0; i < beanCount; i++) {
+            const bean = new THREE.Mesh(beanGeo, beanMat);
+            bean.scale.set(1, 0.55, 0.85);
+            const phi = Math.acos(-1 + (2 * i) / beanCount);
+            const theta = Math.sqrt(beanCount * Math.PI) * phi;
+            const r = 2.7;
+            bean.position.set(
+                r * Math.sin(phi) * Math.cos(theta),
+                r * Math.sin(phi) * Math.sin(theta) * 0.6,
+                r * Math.cos(phi)
+            );
+            bean.lookAt(0, 0, 0);
+            bean.castShadow = true;
+            beanGroup.add(bean);
+            beans.push({ mesh: bean, angle: i * 0.45, speed: 0.0012 + Math.random() * 0.001, baseR: r });
+        }
+
+        // ---- Steam particle system ----
+        const steamCount = 44;
+        const steamGeo = new THREE.BufferGeometry();
+        const steamPos = new Float32Array(steamCount * 3);
+        const steamLife = new Float32Array(steamCount);
+        const steamSize = new Float32Array(steamCount);
+        const steamOffset = new Float32Array(steamCount);
+        for (let i = 0; i < steamCount; i++) {
+            steamPos[i * 3] = (Math.random() - 0.5) * 0.18;
+            steamPos[i * 3 + 1] = Math.random() * 1.6 + 0.35;
+            steamPos[i * 3 + 2] = (Math.random() - 0.5) * 0.18;
+            steamLife[i] = Math.random();
+            steamSize[i] = 0.035 + Math.random() * 0.05;
+            steamOffset[i] = Math.random() * Math.PI * 2;
+        }
+        steamGeo.setAttribute('position', new THREE.BufferAttribute(steamPos, 3));
+        steamGeo.setAttribute('aLife', new THREE.BufferAttribute(steamLife, 1));
+        steamGeo.setAttribute('aSize', new THREE.BufferAttribute(steamSize, 1));
+        steamGeo.setAttribute('aOffset', new THREE.BufferAttribute(steamOffset, 1));
+
+        const steamMat = new THREE.ShaderMaterial({
+            uniforms: {
+                uTime: { value: 0 },
+                uBrew: { value: 0 },
+                uColor: { value: new THREE.Color(0xefe4dd) }
+            },
+            vertexShader: `
+                attribute float aLife;
+                attribute float aSize;
+                attribute float aOffset;
+                uniform float uTime;
+                uniform float uBrew;
+                varying float vAlpha;
+                void main() {
+                    vec3 pos = position;
+                    float t = uTime * 0.45 + aLife * 2.6 + aOffset;
+                    float brew = 1.0 + uBrew * 1.5;
+                    float lift = sin(t) * (0.7 * brew);
+                    pos.y += lift;
+                    pos.x += sin(t * 1.4 + aOffset) * (0.05 * brew);
+                    pos.z += cos(t * 1.0 + aOffset) * (0.05 * brew);
+                    float cycle = fract(t / 2.2);
+                    float fade = 1.0 - cycle;
+                    vAlpha = fade * 0.75;
+                    vec4 mvPos = modelViewMatrix * vec4(pos, 1.0);
+                    gl_PointSize = aSize * (1.0 + lift * 0.5) * (300.0 / -mvPos.z);
+                    gl_Position = projectionMatrix * mvPos;
+                }
+            `,
+            fragmentShader: `
+                uniform vec3 uColor;
+                varying float vAlpha;
+                void main() {
+                    float r = distance(gl_PointCoord, vec2(0.5));
+                    float alpha = vAlpha * (1.0 - smoothstep(0.0, 0.55, r));
+                    gl_FragColor = vec4(uColor, alpha);
+                }
+            `,
+            transparent: true,
+            depthWrite: false
+        });
+        const steam = new THREE.Points(steamGeo, steamMat);
+        cupGroup.add(steam);
+
+        // Glow plane behind cup
+        const glowGeo = new THREE.PlaneGeometry(14, 14);
+        const glowMat = new THREE.MeshBasicMaterial({
+            color: 0xc9a227,
+            transparent: true,
+            opacity: 0,
+            blending: THREE.AdditiveBlending
+        });
+        const glow = new THREE.Mesh(glowGeo, glowMat);
+        glow.position.z = -2;
+        scene.add(glow);
+
+        // ---- Interaction state ----
+        const mouse = new THREE.Vector2(0, 0);
+        const target = new THREE.Vector2(0, 0);
+        let scrollY = 0;
+        let brew = 0;
+        let brewTarget = 0;
+
+        const raycaster = new THREE.Raycaster();
+        const cupClickTarget = new THREE.Vector2();
+
+        window.addEventListener('mousemove', (e) => {
+            mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+            mouse.y = -(e.clientY / window.innerHeight) * 2 + 1;
+        });
+
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches.length) {
+                mouse.x = (e.touches[0].clientX / window.innerWidth) * 2 - 1;
+                mouse.y = -(e.touches[0].clientY / window.innerHeight) * 2 + 1;
+            }
+        }, { passive: true });
+
+        window.addEventListener('scroll', () => {
+            scrollY = window.scrollY;
+        });
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Click to brew
+        function triggerBrew() {
+            brewTarget = 1;
+        }
+
+        window.addEventListener('mousedown', (e) => {
+            if (e.target.closest('a, button, .menu-btn')) return;
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects([cup, rim, liquid, foam], true);
+            if (intersects.length > 0) triggerBrew();
+        });
+
+        window.addEventListener('touchstart', (e) => {
+            raycaster.setFromCamera(mouse, camera);
+            const intersects = raycaster.intersectObjects([cup, rim, liquid, foam], true);
+            if (intersects.length > 0) triggerBrew();
+        }, { passive: true });
+
+        const clock = new THREE.Clock();
+
+        function animate() {
+            requestAnimationFrame(animate);
+            const t = clock.getElapsedTime();
+
+            // Brew decay
+            brew += (brewTarget - brew) * 0.06;
+            if (brewTarget === 0 && brew < 0.01) brew = 0;
+            steamMat.uniforms.uBrew.value = brew;
+            steamMat.uniforms.uTime.value = t;
+
+            // Cup subtle float + rotation
+            cupGroup.rotation.y += 0.006 * (1 + brew * 0.5);
+            cupGroup.rotation.x = Math.sin(t * 0.5) * 0.025;
+            cupGroup.position.y = Math.sin(t * 1.1) * 0.02 * (1 + brew);
+
+            // Liquid ripple on brew
+            if (brew > 0) {
+                liquid.scale.set(1 + Math.sin(t * 12) * 0.015 * brew, 1, 1 + Math.cos(t * 12) * 0.015 * brew);
+            } else {
+                liquid.scale.set(1, 1, 1);
+            }
+
+            // Beans orbit faster when brewing
+            beans.forEach((b, i) => {
+                b.angle += b.speed * (1 + brew * 3);
+                b.mesh.position.x = Math.cos(b.angle + i) * b.baseR;
+                b.mesh.position.z = Math.sin(b.angle + i) * b.baseR;
+                b.mesh.position.y = 0.4 + Math.sin(b.angle * 1.5 + i) * (0.12 + brew * 0.1);
+                b.mesh.lookAt(0, 0, 0);
+            });
+
+            // Steam follows cup
+            steam.position.set(0, 0.55 + Math.sin(t * 1.2) * 0.02 * (1 + brew), 0);
+
+            // Mouse parallax
+            target.x += (mouse.x - target.x) * 0.05;
+            target.y += (mouse.y - target.y) * 0.05;
+
+            camera.position.x = target.x * 1.2;
+            camera.position.y = target.y * 1.0;
+            camera.lookAt(0, 0, 0);
+
+            cupGroup.position.x = -target.x * 0.35;
+            cupGroup.position.y = -target.y * 0.2 + Math.sin(t) * 0.03 * (1 + brew);
+
+            // Scroll glow pulse
+            glow.material.opacity = THREE.MathUtils.clamp((scrollY - 300) / 700, 0, 0.3) + brew * 0.15;
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+
+        /* ---------- Reveal on scroll ---------- */
+        const reveals = document.querySelectorAll('.reveal');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.12, rootMargin: '0px 0px -80px 0px' });
+        reveals.forEach(el => observer.observe(el));
+
+        /* ---------- Preloader ---------- */
+        window.addEventListener('load', () => {
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.classList.add('loaded');
+                setTimeout(() => preloader.remove(), 800);
+            }, 700);
+        });
+    </script>
+</body>
+</html>
