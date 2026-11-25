@@ -4,14 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mad Coffee — Awaken Your Senses</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;0,900;1,700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #0a0807;
+            --bg: #060504;
             --ink: #f5f1ea;
             --accent: #c9a227;
-            --accent-glow: rgba(201, 162, 39, 0.35);
+            --accent-soft: rgba(201, 162, 39, 0.35);
             --coffee: #4b2e1f;
             --cream: #d7ccc8;
+            --surface: rgba(255, 255, 255, 0.03);
+            --border: rgba(245, 241, 234, 0.08);
             --font-main: 'Playfair Display', serif;
             --font-ui: 'Inter', sans-serif;
         }
@@ -29,6 +34,7 @@
             font-family: var(--font-ui);
             overflow-x: hidden;
             cursor: default;
+            -webkit-font-smoothing: antialiased;
         }
 
         canvas { display: block; }
@@ -58,69 +64,76 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
+            transition: opacity 0.9s cubic-bezier(0.23, 1, 0.32, 1), visibility 0.9s ease;
         }
 
         #preloader.loaded {
             opacity: 0;
             visibility: hidden;
+            pointer-events: none;
         }
 
         .preloader-logo {
             font-family: var(--font-main);
-            font-size: 1.7rem;
-            font-weight: 800;
+            font-size: 1.8rem;
+            font-weight: 900;
             letter-spacing: -0.03em;
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            margin-bottom: 2.5rem;
+            margin-bottom: 3rem;
+            mix-blend-mode: difference;
         }
 
-        .preloader-logo mark { background: var(--accent); color: var(--bg); padding: 0 0.4em; }
+        .preloader-logo mark { background: var(--accent); color: var(--bg); padding: 0 0.45em; }
 
         .preloader-ring {
-            width: 56px; height: 56px;
-            border: 2px solid rgba(201,162,39,0.15);
+            width: 60px; height: 60px;
+            border: 2px solid rgba(201,162,39,0.12);
             border-top-color: var(--accent);
             border-radius: 50%;
             animation: spin 1s linear infinite;
-            box-shadow: 0 0 20px var(--accent-glow);
+            box-shadow: 0 0 30px var(--accent-soft);
+        }
+
+        .preloader-text {
+            margin-top: 2rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.5em;
+            text-transform: uppercase;
+            color: rgba(245,241,234,0.35);
+            animation: pulse 2s ease-in-out infinite;
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
-
-        .preloader-text {
-            margin-top: 1.5rem;
-            font-size: 0.8rem;
-            letter-spacing: 0.35em;
-            text-transform: uppercase;
-            color: rgba(245,241,234,0.45);
-        }
+        @keyframes pulse { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
 
         /* ---- Header ---- */
         header {
             position: fixed;
             top: 0; left: 0; width: 100%;
-            padding: 1.5rem 3rem;
+            padding: 1.25rem 3rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
             z-index: 60;
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(245, 241, 234, 0.06);
-            transition: background 0.4s, border-color 0.4s;
+            transition: background 0.5s ease, border-color 0.5s ease, padding 0.5s ease;
+            mix-blend-mode: difference;
         }
 
         header.scrolled {
-            background: rgba(10, 8, 7, 0.85);
-            border-bottom-color: rgba(245, 241, 234, 0.15);
+            background: rgba(6, 5, 4, 0.92);
+            border-bottom-color: rgba(245, 241, 234, 0.18);
+            padding: 1rem 3rem;
+            mix-blend-mode: normal;
         }
 
         .logo {
             font-family: var(--font-main);
             font-size: 1.5rem;
-            font-weight: 700;
+            font-weight: 900;
             letter-spacing: -0.04em;
             color: var(--ink);
             text-decoration: none;
@@ -128,23 +141,28 @@
             align-items: center;
             gap: 0.5rem;
             z-index: 10;
+            transition: transform 0.3s;
         }
 
-        .logo mark { background: var(--accent); color: var(--bg); padding: 0 0.35em; font-weight: 800; }
+        .logo:hover { transform: scale(1.02); }
+        .logo mark { background: var(--accent); color: var(--bg); padding: 0 0.4em; font-weight: 900; }
 
         nav a {
             color: var(--ink);
             text-decoration: none;
-            font-size: 0.9rem;
-            margin-left: 2.5rem;
+            font-size: 0.85rem;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-left: 3rem;
             position: relative;
             transition: color 0.3s;
         }
 
         nav a::after {
-            content: ''; position: absolute; left: 0; bottom: -4px;
-            width: 0; height: 1px; background: var(--accent);
-            transition: width 0.3s ease;
+            content: ''; position: absolute; left: 0; bottom: -6px;
+            width: 0; height: 2px; background: linear-gradient(90deg, var(--accent), #e8c55a);
+            transition: width 0.4s cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         nav a:hover { color: var(--accent); }
@@ -153,14 +171,28 @@
         nav a.active::after { width: 100%; }
 
         .menu-btn {
-            background: none; border: 1px solid rgba(245,241,234,0.25);
-            color: var(--ink); padding: 0.6rem 1.1rem;
-            font-family: var(--font-ui); font-size: 0.85rem;
-            border-radius: 40px; cursor: pointer;
-            transition: all 0.3s; z-index: 10;
+            background: linear-gradient(135deg, var(--accent), #b8941e);
+            color: var(--bg);
+            border: none;
+            padding: 0.7rem 1.4rem;
+            font-family: var(--font-ui);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s;
+            z-index: 10;
+            box-shadow: 0 0 0 rgba(201,162,39,0);
         }
 
-        .menu-btn:hover { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+        .menu-btn:hover {
+            box-shadow: 0 0 25px var(--accent-soft);
+            transform: translateY(-1px);
+        }
+
+        .menu-btn:active { transform: scale(0.97); }
 
         /* Mobile hamburger */
         .hamburger {
@@ -181,13 +213,13 @@
         }
 
         .mobile-menu {
-            position: fixed; top: 0; right: -100%; width: 100%; max-width: 320px;
-            height: 100vh; background: rgba(10, 8, 7, 0.97);
-            backdrop-filter: blur(16px);
+            position: fixed; top: 0; right: -100%; width: 100%; max-width: 340px;
+            height: 100vh; background: rgba(6, 5, 4, 0.98);
+            backdrop-filter: blur(24px);
             z-index: 55;
-            padding: 4rem 2.5rem 2rem;
+            padding: 4rem 3rem 2rem;
             display: flex; flex-direction: column;
-            transition: right 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: right 0.5s cubic-bezier(0.23, 1, 0.32, 1);
             border-left: 1px solid rgba(245,241,234,0.08);
         }
 
@@ -196,23 +228,24 @@
         .mobile-menu .close-btn {
             align-self: flex-start;
             background: none; border: none;
-            color: var(--ink); font-size: 1.5rem;
+            color: var(--ink); font-size: 2rem;
             cursor: pointer; padding: 0.5rem;
+            line-height: 1;
         }
 
         .mobile-menu nav {
-            display: flex; flex-direction: column; margin-top: 2rem;
+            display: flex; flex-direction: column; margin-top: 3rem;
         }
 
         .mobile-menu nav a {
-            font-size: 1.4rem; margin: 1.2rem 0 0;
-            font-family: var(--font-main); font-weight: 700;
+            font-size: 1.6rem; margin: 1.5rem 0 0;
+            font-family: var(--font-main); font-weight: 900;
         }
 
         .mobile-menu nav a.active { color: var(--accent); }
 
         .mobile-menu .menu-btn {
-            margin-top: 2.5rem; align-self: flex-start;
+            margin-top: 3rem; align-self: flex-start;
             width: fit-content;
         }
 
@@ -227,196 +260,243 @@
             overflow: hidden;
         }
 
+        .hero-bg {
+            position: absolute; inset: 0;
+            background: radial-gradient(circle at 50% 40%, rgba(201,162,39,0.08), transparent 55%);
+            z-index: 1;
+        }
+
         .hero-content {
             position: relative;
             z-index: 20;
-            max-width: 700px;
+            max-width: 720px;
         }
 
         .kicker {
-            font-size: 0.85rem; letter-spacing: 0.45em; text-transform: uppercase;
-            color: var(--accent); font-weight: 600; margin-bottom: 1.2rem;
-            opacity: 0; transform: translateY(20px);
-            animation: fadeUp 1s 0.2s forwards ease-out;
+            font-size: 0.8rem; letter-spacing: 0.6em; text-transform: uppercase;
+            color: var(--accent); font-weight: 700; margin-bottom: 1.5rem;
+            opacity: 0; transform: translateY(30px);
+            animation: fadeUp 1s 0.3s forwards cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         h1 {
-            font-size: clamp(3rem, 8vw, 7rem);
-            line-height: 0.95; letter-spacing: -0.03em;
-            margin-bottom: 1.5rem;
-            opacity: 0; transform: translateY(30px);
-            animation: fadeUp 1s 0.4s forwards ease-out;
+            font-size: clamp(3.5rem, 10vw, 8rem);
+            line-height: 0.9; letter-spacing: -0.04em;
+            margin-bottom: 1.75rem;
+            opacity: 0; transform: translateY(40px);
+            animation: fadeUp 1s 0.5s forwards cubic-bezier(0.23, 1, 0.32, 1);
         }
 
-        h1 .accent { color: var(--accent); }
+        h1 .accent { color: var(--accent); font-style: italic; }
+        h1 .gradient-text {
+            background: linear-gradient(135deg, #ffffff 0%, #c9a227 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
         .hero p {
-            font-size: 1.25rem; line-height: 1.6;
-            color: rgba(245,241,234,0.7); max-width: 520px;
-            margin-bottom: 2.5rem;
-            opacity: 0; transform: translateY(30px);
-            animation: fadeUp 1s 0.6s forwards ease-out;
+            font-size: 1.35rem; line-height: 1.7;
+            color: rgba(245,241,234,0.75); max-width: 560px;
+            margin-bottom: 3rem;
+            opacity: 0; transform: translateY(40px);
+            animation: fadeUp 1s 0.7s forwards cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .cta-group { display: flex; gap: 1rem; flex-wrap: wrap;
-            opacity: 0; transform: translateY(30px);
-            animation: fadeUp 1s 0.8s forwards ease-out;
+            opacity: 0; transform: translateY(40px);
+            animation: fadeUp 1s 0.9s forwards cubic-bezier(0.23, 1, 0.32, 1);
         }
 
         .btn {
-            display: inline-flex; align-items: center; gap: 0.5rem;
-            padding: 1rem 1.75rem; border-radius: 40px;
-            font-weight: 600; font-size: 1rem; text-decoration: none;
-            transition: all 0.3s; cursor: pointer;
+            display: inline-flex; align-items: center; gap: 0.6rem;
+            padding: 1.1rem 2rem; border-radius: 50px;
+            font-weight: 600; font-size: 0.95rem; text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1); cursor: pointer;
+            position: relative; overflow: hidden;
         }
 
-        .btn-primary { background: var(--accent); color: var(--bg); }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 30px var(--accent-glow); }
+        .btn::before {
+            content: ''; position: absolute; inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0));
+            transform: translateX(-100%);
+            transition: transform 0.5s;
+        }
 
-        .btn-ghost { border: 1px solid rgba(245,241,234,0.35); color: var(--ink); background: transparent; }
-        .btn-ghost:hover { background: rgba(245,241,234,0.08); border-color: var(--ink); }
+        .btn:hover::before { transform: translateX(100%); }
+
+        .btn-primary { background: var(--accent); color: var(--bg); box-shadow: 0 0 0 rgba(201,162,39,0); }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 0 40px var(--accent-soft); }
+
+        .btn-ghost { border: 1px solid rgba(245,241,234,0.3); color: var(--ink); background: transparent; }
+        .btn-ghost:hover { background: rgba(245,241,234,0.08); border-color: var(--ink); transform: translateY(-2px); }
 
         .mouse-hint {
-            position: absolute; bottom: 3rem; left: 50%; transform: translateX(-50%);
-            font-size: 0.75rem; letter-spacing: 0.3em; text-transform: uppercase;
-            color: rgba(245,241,234,0.4); z-index: 20;
-            animation: bounce 2.5s infinite;
+            position: absolute; bottom: 3.5rem; left: 50%; transform: translateX(-50%);
+            font-size: 0.7rem; letter-spacing: 0.4em; text-transform: uppercase;
+            color: rgba(245,241,234,0.35); z-index: 20;
+            animation: bounce 3s ease-in-out infinite;
         }
 
-        /* ---- Section base ---- */
-        section { position: relative; padding: 140px 3rem; }
-
-        .section-head {
-            text-align: center; max-width: 600px; margin: 0 auto 4rem;
-        }
-
-        .section-head .kicker {
-            display: block; font-size: 0.8rem; letter-spacing: 0.5em;
-            text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;
-        }
-
-        .section-head h2 {
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 1.5rem;
-        }
-
-        .section-head p {
-            color: rgba(245,241,234,0.65); font-size: 1.15rem; line-height: 1.7;
-        }
-
-        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s ease-out; }
-        .reveal.active { opacity: 1; transform: none; }
-        .reveal-delay { transition-delay: 0.2s; }
-
-        /* ---- About ---- */
-        .about-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
-        }
-
-        @media (max-width: 900px) { .about-grid { grid-template-columns: 1fr; gap: 2.5rem; } }
-
-        .about-img {
-            height: 460px; border-radius: 30px;
-            background: linear-gradient(135deg, var(--coffee), #2a1a12);
-            position: relative; overflow: hidden;
-            display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 40px 80px rgba(0,0,0,0.5);
-        }
-
-        .about-img img { width: 100%; height: 100%; object-fit: cover; opacity: 0.55; }
-
-        .about-img::after {
-            content: ''; position: absolute; inset: 0;
-            background: radial-gradient(circle at 40% 40%, rgba(201,162,39,0.15), transparent 60%);
-            pointer-events: none;
-        }
-
-        .about-text h3 { font-size: 2rem; margin-bottom: 1.2rem; line-height: 1.2; }
-        .about-text p { color: rgba(245,241,234,0.75); line-height: 1.8; margin-bottom: 1.5rem; font-size: 1.1rem; }
-
-        .stats {
-            display: flex; gap: 2.5rem; margin-top: 2.5rem;
-        }
-
-        .stat .num { font-family: var(--font-main); font-size: 2rem; font-weight: 700; color: var(--accent); display: block; }
-        .stat .lbl { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.15em; color: rgba(245,241,234,0.55); }
-
-        /* ---- Menu ---- */
-        .menu-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: 2rem; max-width: 1000px; margin: 0 auto;
-        }
-
-        .card {
-            background: rgba(245,241,234,0.03);
-            border: 1px solid rgba(245,241,234,0.08);
-            border-radius: 24px; padding: 2rem; position: relative;
-            overflow: hidden; transition: transform 0.4s, border-color 0.4s;
-            cursor: default;
-        }
-
-        .card:hover { transform: translateY(-8px); border-color: var(--accent); }
-
-        .card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle at 80% -10%, rgba(201,162,39,0.1), transparent 55%);
-            opacity: 0; transition: opacity 0.4s; pointer-events: none;
-        }
-
-        .card:hover::before { opacity: 1; }
-
-        .badge {
-            display: inline-block; font-size: 0.7rem; letter-spacing: 0.2em;
-            text-transform: uppercase; color: var(--accent); font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .card h3 { font-size: 1.4rem; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
-        .card p { color: rgba(245,241,234,0.65); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; }
-
-        .price { font-family: var(--font-main); font-size: 1.5rem; font-weight: 700; color: var(--ink); }
-
-        /* ---- Contact ---- */
-        .contact-wrap {
-            max-width: 600px; margin: 0 auto; text-align: center;
-        }
-
-        .contact-wrap h2 { font-size: 3rem; margin-bottom: 1rem; letter-spacing: -0.02em; }
-        .contact-wrap p { color: rgba(245,241,234,0.7); margin-bottom: 3rem; font-size: 1.2rem; }
-
-        .contact-card {
-            background: rgba(255,255,255,0.03); border: 1px solid rgba(245,241,234,0.1);
-            border-radius: 30px; padding: 3rem; margin-bottom: 3rem;
-        }
-
-        .contact-item { display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.5rem; }
-        .contact-item .dot { width: 10px; height: 10px; background: var(--accent); border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 15px var(--accent-glow); }
-        .contact-item a { color: var(--ink); text-decoration: none; font-size: 1.1rem; }
-        .contact-item a:hover { color: var(--accent); }
-
-        .social { display: flex; justify-content: center; gap: 1.5rem; }
-        .social a {
-            width: 44px; height: 44px; border-radius: 50%;
-            border: 1px solid rgba(245,241,234,0.2); color: var(--ink);
-            display: flex; align-items: center; justify-content: center;
-            text-decoration: none; font-size: 1.2rem; transition: all 0.3s;
-        }
-        .social a:hover { background: var(--accent); border-color: var(--accent); color: var(--bg); transform: translateY(-3px); }
-
-        /* ---- Footer ---- */
-        footer {
-            padding: 3rem; border-top: 1px solid rgba(245,241,234,0.08);
-            text-align: center; color: rgba(245,241,234,0.4); font-size: 0.85rem;
-        }
-
-        /* ---- Animations ---- */
         @keyframes fadeUp {
             to { opacity: 1; transform: none; }
         }
 
         @keyframes bounce {
             0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-8px); }
+            50% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        /* ---- Section base ---- */
+        section { position: relative; padding: 160px 3rem; }
+
+        .parallax-wrap {
+            position: absolute; inset: 0;
+            background: radial-gradient(circle at 50% 30%, rgba(201,162,39,0.04), transparent 60%);
+            pointer-events: none;
+        }
+
+        .section-head {
+            text-align: center; max-width: 640px; margin: 0 auto 5rem;
+        }
+
+        .section-head .kicker {
+            display: block; font-size: 0.75rem; letter-spacing: 0.7em;
+            text-transform: uppercase; color: var(--accent); margin-bottom: 1.25rem;
+            font-weight: 700;
+        }
+
+        .section-head h2 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            line-height: 1.05; letter-spacing: -0.03em; margin-bottom: 1.5rem;
+        }
+
+        .section-head h2 .accent { color: var(--accent); }
+
+        .section-head p {
+            color: rgba(245,241,234,0.7); font-size: 1.2rem; line-height: 1.8;
+        }
+
+        .reveal { opacity: 0; transform: translateY(50px); transition: all 0.9s cubic-bezier(0.23, 1, 0.32, 1); }
+        .reveal.active { opacity: 1; transform: none; }
+        .reveal-delay { transition-delay: 0.2s; }
+
+        /* ---- About ---- */
+        .about-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center;
+        }
+
+        @media (max-width: 900px) { .about-grid { grid-template-columns: 1fr; gap: 3rem; } }
+
+        .about-img-wrap {
+            height: 520px; border-radius: 40px;
+            position: relative; overflow: hidden;
+            box-shadow: 0 50px 100px rgba(0,0,0,0.6);
+            border: 1px solid var(--border);
+            background: linear-gradient(135deg, var(--coffee), #1a1008);
+        }
+
+        .about-img-wrap img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; transition: transform 0.8s ease; }
+        .about-img-wrap:hover img { transform: scale(1.05); }
+
+        .about-img-wrap::after {
+            content: ''; position: absolute; inset: -20%;
+            background: radial-gradient(circle at 50% 50%, rgba(201,162,39,0.15), transparent 50%);
+            pointer-events: none;
+        }
+
+        .about-text h3 { font-size: 2.2rem; margin-bottom: 1.5rem; line-height: 1.15; letter-spacing: -0.02em; }
+        .about-text h3 .accent { color: var(--accent); }
+        .about-text p { color: rgba(245,241,234,0.8); line-height: 1.9; margin-bottom: 1.75rem; font-size: 1.15rem; }
+
+        .stats {
+            display: flex; gap: 3rem; margin-top: 3rem;
+        }
+
+        .stat { display: flex; flex-direction: column; }
+        .stat .num { font-family: var(--font-main); font-size: 2.5rem; font-weight: 900; color: var(--accent); line-height: 1; }
+        .stat .lbl { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.25em; color: rgba(245,241,234,0.5); margin-top: 0.4rem; }
+
+        /* ---- Menu ---- */
+        .menu-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem; max-width: 1100px; margin: 0 auto;
+        }
+
+        .card {
+            position: relative;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 32px; padding: 2.5rem;
+            overflow: hidden; transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+            cursor: default;
+            transform-style: preserve-3d;
+        }
+
+        .card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at 80% -10%, rgba(201,162,39,0.12), transparent 55%);
+            opacity: 0; transition: opacity 0.5s; pointer-events: none;
+        }
+
+        .card:hover {
+            transform: translateY(-12px) scale(1.01);
+            border-color: var(--accent);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5), 0 0 40px var(--accent-soft);
+        }
+
+        .card:hover::before { opacity: 1; }
+
+        .badge {
+            display: inline-block; font-size: 0.65rem; letter-spacing: 0.3em;
+            text-transform: uppercase; color: var(--accent); font-weight: 800;
+            margin-bottom: 1.5rem;
+        }
+
+        .card h3 { font-size: 1.5rem; margin-bottom: 0.75rem; letter-spacing: -0.01em; }
+        .card p { color: rgba(245,241,234,0.7); font-size: 1rem; line-height: 1.7; margin-bottom: 2rem; }
+
+        .price-row {
+            display: flex; justify-content: space-between; align-items: baseline;
+            padding-top: 1.5rem; border-top: 1px solid rgba(245,241,234,0.1);
+        }
+
+        .price { font-family: var(--font-main); font-size: 1.75rem; font-weight: 900; color: var(--ink); }
+
+        /* ---- Contact ---- */
+        .contact-wrap {
+            max-width: 640px; margin: 0 auto; text-align: center;
+        }
+
+        .contact-wrap h2 { font-size: clamp(2.5rem, 6vw, 4rem); margin-bottom: 1rem; letter-spacing: -0.03em; }
+        .contact-wrap p { color: rgba(245,241,234,0.7); margin-bottom: 4rem; font-size: 1.25rem; }
+
+        .contact-card {
+            background: rgba(255,255,255,0.02); border: 1px solid var(--border);
+            border-radius: 36px; padding: 3.5rem; margin-bottom: 4rem;
+            backdrop-filter: blur(20px);
+        }
+
+        .contact-item { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 2rem; }
+        .contact-item .dot { width: 10px; height: 10px; background: var(--accent); border-radius: 50%; flex-shrink: 0; box-shadow: 0 0 20px var(--accent-soft); }
+        .contact-item div { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--accent); font-weight: 800; }
+        .contact-item a { color: var(--ink); text-decoration: none; font-size: 1.2rem; margin-top: 0.25rem; display: block; }
+        .contact-item a:hover { color: var(--accent); }
+
+        .social { display: flex; justify-content: center; gap: 1.75rem; }
+        .social a {
+            width: 48px; height: 48px; border-radius: 50%;
+            border: 1px solid rgba(245,241,234,0.15); color: var(--ink);
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; font-size: 1.3rem; transition: all 0.4s;
+        }
+        .social a:hover { background: var(--accent); border-color: var(--accent); color: var(--bg); transform: translateY(-4px); box-shadow: 0 0 25px var(--accent-soft); }
+
+        /* ---- Footer ---- */
+        footer {
+            padding: 3rem; border-top: 1px solid var(--border);
+            text-align: center; color: rgba(245,241,234,0.35); font-size: 0.8rem;
+            letter-spacing: 0.2em; text-transform: uppercase;
         }
 
         /* scrollbar */
@@ -426,23 +506,25 @@
         ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
 
         @media (max-width: 640px) {
-            header { padding: 1.25rem 1.5rem; }
+            header { padding: 1rem 1.5rem; }
+            header.scrolled { padding: 0.85rem 1.5rem; }
             nav { display: none; }
-            .menu-btn { padding: 0.5rem 0.9rem; font-size: 0.75rem; }
+            .menu-btn { padding: 0.6rem 1.1rem; font-size: 0.75rem; }
             .hamburger { display: flex; }
-            section { padding: 100px 1.5rem; }
-            .stats { flex-direction: column; gap: 1.5rem; align-items: flex-start; }
-            .contact-card { padding: 2rem; }
+            section { padding: 110px 1.5rem; }
+            .stats { flex-direction: column; gap: 2rem; align-items: flex-start; }
+            .contact-card { padding: 2.5rem; }
+            .cta-group { flex-direction: column; align-items: flex-start; }
+            .hero p { font-size: 1.15rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- Preloader -->
     <div id="preloader">
         <div class="preloader-logo">M<span style="color:var(--accent)">A</span>D Coffee</div>
         <div class="preloader-ring"></div>
-        <div class="preloader-text">Brewing the experience</div>
+        <div class="preloader-text">brewing</div>
     </div>
 
     <canvas id="webgl"></canvas>
@@ -454,10 +536,10 @@
             <a href="#menu">Menu</a>
             <a href="#contact">Contact</a>
         </nav>
+        <button class="menu-btn" onclick="scrollToSection('menu'); return false;">View Menu</button>
         <button class="hamburger" id="hamburger" aria-label="Open menu">
             <span></span><span></span><span></span>
         </button>
-        <button class="menu-btn" onclick="scrollToSection('menu'); return false;">View Menu</button>
     </header>
 
     <div class="mobile-menu" id="mobile-menu">
@@ -471,9 +553,10 @@
     </div>
 
     <section class="hero layer" id="home">
+        <div class="hero-bg"></div>
         <div class="hero-content">
             <div class="kicker">Specialty Coffee Roastery</div>
-            <h1>Mad <span class="accent">Coffee</span><br>For the Curious Soul</h1>
+            <h1>Mad <span class="accent">Coffee</span><br><span class="gradient-text">For the Curious Soul</span></h1>
             <p>Small-batch roasted beans, ethically sourced and brewed with obsession. Step into a darker, richer ritual.</p>
             <div class="cta-group">
                 <a href="#menu" class="btn btn-primary" onclick="scrollToSection('menu'); return false;">Explore the Roast</a>
@@ -484,14 +567,15 @@
     </section>
 
     <section id="about" class="layer">
+        <div class="parallax-wrap"></div>
         <div class="section-head reveal">
             <span class="kicker">About Us</span>
-            <h2>Brewed with<br>Obsession</h2>
+            <h2>Brewed with<br><span class="accent">Obsession</span></h2>
             <p>We roast in the quiet hours, chasing the perfect crack. Every bean tells a story of altitude, soil, and patience. Mad Coffee is where ritual meets rebellion.</p>
         </div>
         <div class="about-grid">
-            <div class="about-img reveal">
-                <img src="https://images.unsplash.com/photo-1495474472287-4d71bc821562?auto=format&fit=crop&w=800&q=80" alt="Coffee beans">
+            <div class="about-img-wrap reveal">
+                <img src="https://images.unsplash.com/photo-1495474472287-4d71bc821562?auto=format&fit=crop&w=1200&q=85" alt="Coffee beans">
             </div>
             <div class="about-text reveal reveal-delay">
                 <h3>From farm to cup</h3>
@@ -507,63 +591,65 @@
     </section>
 
     <section id="menu" class="layer">
+        <div class="parallax-wrap"></div>
         <div class="section-head reveal">
             <span class="kicker">The Roast List</span>
-            <h2>Seasonal<br>Offerings</h2>
+            <h2>Seasonal<br><span class="accent">Offerings</span></h2>
         </div>
         <div class="menu-grid">
             <article class="card reveal">
                 <span class="badge">Espresso</span>
                 <h3>Madhouse Blend</h3>
                 <p>Chocolate, red apple, and a lingering hint of tobacco. Our signature pull—bold without bitterness.</p>
-                <span class="price">$4.50</span>
+                <div class="price-row"><span>$4.50</span></div>
             </article>
             <article class="card reveal reveal-delay">
                 <span class="badge">Filter</span>
                 <h3>Yirgacheffe Light</h3>
                 <p>Floral and citrus-forward with jasmine aromatics. Best enjoyed black, slow.</p>
-                <span class="price">$5.00</span>
+                <div class="price-row"><span>$5.00</span></div>
             </article>
             <article class="card reveal">
                 <span class="badge">Cold Brew</span>
                 <h3>Midnight Steep</h3>
                 <p>Steeped 18 hours. Syrupy body, dark cherry notes, served over a single large cube.</p>
-                <span class="price">$5.50</span>
+                <div class="price-row"><span>$5.50</span></div>
             </article>
             <article class="card reveal reveal-delay">
                 <span class="badge">Signature</span>
                 <h3>Mad Affogato</h3>
                 <p>Two shots of hot espresso poured over vanilla bean gelato. Bitter meets sweet in a glass.</p>
-                <span class="price">$7.00</span>
+                <div class="price-row"><span>$7.00</span></div>
             </article>
         </div>
     </section>
 
     <section id="contact" class="layer">
+        <div class="parallax-wrap"></div>
         <div class="contact-wrap">
             <div class="section-head reveal" style="text-align:center;">
                 <span class="kicker">Visit Us</span>
-                <h2>Find the<br>Cafe</h2>
+                <h2>Find the<br><span class="accent">Cafe</span></h2>
             </div>
             <div class="contact-card reveal reveal-delay">
                 <div class="contact-item">
                     <div class="dot"></div>
                     <div>
-                        <div style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.2em;color:var(--accent);font-weight:700;">Address</div>
+                        <div>Address</div>
                         <a href="https://maps.google.com" target="_blank">42 Roastery Lane, Downtown</a>
                     </div>
                 </div>
                 <div class="contact-item">
                     <div class="dot"></div>
                     <div>
-                        <div style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.2em;color:var(--accent);font-weight:700;">Hours</div>
+                        <div>Hours</div>
                         <a>Daily 7:00 &mdash; 19:00</a>
                     </div>
                 </div>
                 <div class="contact-item">
                     <div class="dot"></div>
                     <div>
-                        <div style="font-size:0.8rem;text-transform:uppercase;letter-spacing:0.2em;color:var(--accent);font-weight:700;">Email</div>
+                        <div>Email</div>
                         <a href="mailto:hello@madcoffee.example">hello@madcoffee.example</a>
                     </div>
                 </div>
@@ -580,12 +666,11 @@
         Mad Coffee &middot; Roasted with obsession. &copy; <span id="year"></span>
     </footer>
 
-    <!-- Three.js (global UMD build - works when opened directly) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/0.160.0/three.min.js"></script>
     <script>
         document.getElementById('year').textContent = new Date().getFullYear();
 
-        /* ---------- Navigation helpers ---------- */
+        /* ---------- Navigation ---------- */
         function scrollToSection(id) {
             const el = document.getElementById(id);
             if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -606,7 +691,6 @@
             });
         }
 
-        /* ---------- Mobile menu ---------- */
         const hamburger = document.getElementById('hamburger');
         const closeMobileBtn = document.getElementById('close-mobile');
         const mobileMenu = document.getElementById('mobile-menu');
@@ -617,7 +701,6 @@
         hamburger.addEventListener('click', openMobile);
         closeMobileBtn.addEventListener('click', closeMobile);
 
-        /* ---------- Header scroll state ---------- */
         const header = document.getElementById('header');
         window.addEventListener('scroll', () => {
             header.classList.toggle('scrolled', window.scrollY > 60);
@@ -627,7 +710,7 @@
         /* ---------- Three.js Scene ---------- */
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 100);
-        camera.position.z = 4.5;
+        camera.position.z = 5;
 
         const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('webgl'), alpha: true, antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
@@ -638,10 +721,10 @@
         renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
         // Lights
-        const ambient = new THREE.AmbientLight(0xffffff, 0.3);
+        const ambient = new THREE.AmbientLight(0xffffff, 0.25);
         scene.add(ambient);
 
-        const keyLight = new THREE.DirectionalLight(0xffffff, 1.4);
+        const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
         keyLight.position.set(3, 6, 4);
         keyLight.castShadow = true;
         keyLight.shadow.mapSize.width = 1024;
@@ -654,22 +737,20 @@
         keyLight.shadow.camera.bottom = -6;
         scene.add(keyLight);
 
-        const fillLight = new THREE.PointLight(0xc9a227, 2.5, 12);
+        const fillLight = new THREE.PointLight(0xc9a227, 2.5, 14);
         fillLight.position.set(-2, 1, 2);
-        fillLight.castShadow = false;
         scene.add(fillLight);
 
-        const rimLight = new THREE.SpotLight(0xffffff, 10, 16, 0.45, 0.5, 1);
+        const rimLight = new THREE.SpotLight(0xffffff, 12, 18, 0.45, 0.5, 1);
         rimLight.position.set(0, 3, -3);
         rimLight.lookAt(0, 0, 0);
-        rimLight.castShadow = false;
         scene.add(rimLight);
 
-        // ---- Coffee cup group ----
+        // Cup group
         const cupGroup = new THREE.Group();
         scene.add(cupGroup);
 
-        const cupColor = new THREE.Color(0x16100b);
+        const cupColor = new THREE.Color(0x14100a);
         const liquidColor = new THREE.Color(0x3d2316);
 
         const cupGeo = new THREE.CylinderGeometry(0.75, 0.62, 1.1, 32);
@@ -714,20 +795,29 @@
         saucer.receiveShadow = true;
         cupGroup.add(saucer);
 
-        // ---- Floating beans ----
+        // Reflective floor plane
+        const floorGeo = new THREE.PlaneGeometry(40, 40);
+        const floorMat = new THREE.MeshStandardMaterial({ color: 0x060504, roughness: 0.1, metalness: 1 });
+        const floor = new THREE.Mesh(floorGeo, floorMat);
+        floor.rotation.x = -Math.PI / 2;
+        floor.position.y = -1.15;
+        floor.receiveShadow = true;
+        scene.add(floor);
+
+        // Beans
         const beanGroup = new THREE.Group();
         scene.add(beanGroup);
 
         const beanGeo = new THREE.SphereGeometry(0.11, 8, 8);
         const beanMat = new THREE.MeshStandardMaterial({ color: 0x2d1407, roughness: 0.55, metalness: 0.2 });
         const beans = [];
-        const beanCount = 16;
+        const beanCount = 18;
         for (let i = 0; i < beanCount; i++) {
             const bean = new THREE.Mesh(beanGeo, beanMat);
             bean.scale.set(1, 0.55, 0.85);
             const phi = Math.acos(-1 + (2 * i) / beanCount);
             const theta = Math.sqrt(beanCount * Math.PI) * phi;
-            const r = 2.7;
+            const r = 2.8;
             bean.position.set(
                 r * Math.sin(phi) * Math.cos(theta),
                 r * Math.sin(phi) * Math.sin(theta) * 0.6,
@@ -739,7 +829,59 @@
             beans.push({ mesh: bean, angle: i * 0.45, speed: 0.0012 + Math.random() * 0.001, baseR: r });
         }
 
-        // ---- Steam particle system ----
+        // Dust motes
+        const dustCount = 80;
+        const dustGeo = new THREE.BufferGeometry();
+        const dustPos = new Float32Array(dustCount * 3);
+        const dustLife = new Float32Array(dustCount);
+        const dustSize = new Float32Array(dustCount);
+        for (let i = 0; i < dustCount; i++) {
+            dustPos[i * 3] = (Math.random() - 0.5) * 20;
+            dustPos[i * 3 + 1] = (Math.random() - 0.5) * 12;
+            dustPos[i * 3 + 2] = (Math.random() - 0.5) * 10;
+            dustLife[i] = Math.random();
+            dustSize[i] = 0.02 + Math.random() * 0.04;
+        }
+        dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+        dustGeo.setAttribute('aLife', new THREE.BufferAttribute(dustLife, 1));
+        dustGeo.setAttribute('aSize', new THREE.BufferAttribute(dustSize, 1));
+
+        const dustMat = new THREE.ShaderMaterial({
+            uniforms: { uTime: { value: 0 }, uColor: { value: new THREE.Color(0xefe4dd) } },
+            vertexShader: `
+                attribute float aLife;
+                attribute float aSize;
+                uniform float uTime;
+                varying float vAlpha;
+                void main() {
+                    vec3 pos = position;
+                    float t = uTime * 0.2 + aLife * 5.0;
+                    pos.y += sin(t) * 0.4;
+                    pos.x += cos(t * 0.7) * 0.15;
+                    pos.z += sin(t * 0.5) * 0.15;
+                    float fade = 0.5 + 0.5 * sin(t + aLife);
+                    vAlpha = fade * 0.4;
+                    vec4 mvPos = modelViewMatrix * vec4(pos, 1.0);
+                    gl_PointSize = aSize * (300.0 / -mvPos.z);
+                    gl_Position = projectionMatrix * mvPos;
+                }
+            `,
+            fragmentShader: `
+                uniform vec3 uColor;
+                varying float vAlpha;
+                void main() {
+                    float r = distance(gl_PointCoord, vec2(0.5));
+                    float alpha = vAlpha * (1.0 - smoothstep(0.0, 0.5, r));
+                    gl_FragColor = vec4(uColor, alpha);
+                }
+            `,
+            transparent: true,
+            depthWrite: false
+        });
+        const dust = new THREE.Points(dustGeo, dustMat);
+        scene.add(dust);
+
+        // Steam
         const steamCount = 44;
         const steamGeo = new THREE.BufferGeometry();
         const steamPos = new Float32Array(steamCount * 3);
@@ -803,19 +945,15 @@
         const steam = new THREE.Points(steamGeo, steamMat);
         cupGroup.add(steam);
 
-        // Glow plane behind cup
-        const glowGeo = new THREE.PlaneGeometry(14, 14);
+        const glowGeo = new THREE.PlaneGeometry(16, 16);
         const glowMat = new THREE.MeshBasicMaterial({
-            color: 0xc9a227,
-            transparent: true,
-            opacity: 0,
-            blending: THREE.AdditiveBlending
+            color: 0xc9a227, transparent: true, opacity: 0, blending: THREE.AdditiveBlending
         });
         const glow = new THREE.Mesh(glowGeo, glowMat);
         glow.position.z = -2;
         scene.add(glow);
 
-        // ---- Interaction state ----
+        // Interaction
         const mouse = new THREE.Vector2(0, 0);
         const target = new THREE.Vector2(0, 0);
         let scrollY = 0;
@@ -823,7 +961,6 @@
         let brewTarget = 0;
 
         const raycaster = new THREE.Raycaster();
-        const cupClickTarget = new THREE.Vector2();
 
         window.addEventListener('mousemove', (e) => {
             mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
@@ -847,10 +984,7 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         });
 
-        // Click to brew
-        function triggerBrew() {
-            brewTarget = 1;
-        }
+        function triggerBrew() { brewTarget = 1; }
 
         window.addEventListener('mousedown', (e) => {
             if (e.target.closest('a, button, .menu-btn')) return;
@@ -871,25 +1005,22 @@
             requestAnimationFrame(animate);
             const t = clock.getElapsedTime();
 
-            // Brew decay
             brew += (brewTarget - brew) * 0.06;
             if (brewTarget === 0 && brew < 0.01) brew = 0;
             steamMat.uniforms.uBrew.value = brew;
             steamMat.uniforms.uTime.value = t;
+            dustMat.uniforms.uTime.value = t;
 
-            // Cup subtle float + rotation
             cupGroup.rotation.y += 0.006 * (1 + brew * 0.5);
             cupGroup.rotation.x = Math.sin(t * 0.5) * 0.025;
             cupGroup.position.y = Math.sin(t * 1.1) * 0.02 * (1 + brew);
 
-            // Liquid ripple on brew
             if (brew > 0) {
                 liquid.scale.set(1 + Math.sin(t * 12) * 0.015 * brew, 1, 1 + Math.cos(t * 12) * 0.015 * brew);
             } else {
                 liquid.scale.set(1, 1, 1);
             }
 
-            // Beans orbit faster when brewing
             beans.forEach((b, i) => {
                 b.angle += b.speed * (1 + brew * 3);
                 b.mesh.position.x = Math.cos(b.angle + i) * b.baseR;
@@ -898,10 +1029,8 @@
                 b.mesh.lookAt(0, 0, 0);
             });
 
-            // Steam follows cup
             steam.position.set(0, 0.55 + Math.sin(t * 1.2) * 0.02 * (1 + brew), 0);
 
-            // Mouse parallax
             target.x += (mouse.x - target.x) * 0.05;
             target.y += (mouse.y - target.y) * 0.05;
 
@@ -912,7 +1041,6 @@
             cupGroup.position.x = -target.x * 0.35;
             cupGroup.position.y = -target.y * 0.2 + Math.sin(t) * 0.03 * (1 + brew);
 
-            // Scroll glow pulse
             glow.material.opacity = THREE.MathUtils.clamp((scrollY - 300) / 700, 0, 0.3) + brew * 0.15;
 
             renderer.render(scene, camera);
@@ -929,12 +1057,29 @@
         }, { threshold: 0.12, rootMargin: '0px 0px -80px 0px' });
         reveals.forEach(el => observer.observe(el));
 
+        /* ---------- Card 3D tilt ---------- */
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mousemove', (e) => {
+                const rect = card.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const centerX = rect.width / 2;
+                const centerY = rect.height / 2;
+                const rotateX = ((y - centerY) / centerY) * -5;
+                const rotateY = ((x - centerX) / centerX) * 5;
+                card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+            });
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = `perspective(1000px) rotateX(0) rotateY(0) scale(1)`;
+            });
+        });
+
         /* ---------- Preloader ---------- */
         window.addEventListener('load', () => {
             const preloader = document.getElementById('preloader');
             setTimeout(() => {
                 preloader.classList.add('loaded');
-                setTimeout(() => preloader.remove(), 800);
+                setTimeout(() => preloader.remove(), 900);
             }, 700);
         });
     </script>
